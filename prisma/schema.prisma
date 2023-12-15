@@ -1,0 +1,1555 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+  schemas  = ["dbo", "tbl_Rep"]
+}
+
+model RefactorLog {
+  OperationKey String @id(map: "PK____Refact__D3AEFFDB28601FC0") @db.UniqueIdentifier
+
+  @@map("__RefactorLog")
+  @@schema("dbo")
+}
+
+model ActiveAndPayingCompany {
+  LineId                       String                    @id(map: "PK__ActiveAn__2EAE6529C5B9392D") @default(dbgenerated("newid()"), map: "DF__ActiveAnd__LineI__21F5FC7F") @db.UniqueIdentifier
+  ClonedAt                     DateTime                  @db.DateTime
+  CompanyId                    Int
+  CompanyUniqueId              String                    @default(dbgenerated("newid()"), map: "DF__ActiveAnd__Compa__22EA20B8") @db.UniqueIdentifier
+  CompanyName                  String                    @db.NVarChar(250)
+  FullAddress                  String?                   @db.NVarChar(2500)
+  PostCode                     String?                   @db.NVarChar(15)
+  Aliases                      String?                   @db.NVarChar(2000)
+  Country                      String?                   @default("United Kingdom", map: "DF__ActiveAnd__Count__23DE44F1") @db.NVarChar(250)
+  GeoLat                       Float?
+  GeoLng                       Float?
+  Icon                         String?                   @db.VarChar(255)
+  EmailAddress                 String?                   @db.NVarChar(250)
+  Website                      String?                   @db.VarChar(255)
+  Telephone                    String?                   @db.NVarChar(250)
+  IndustryID                   Int?
+  IndustryDescription          String?                   @db.NVarChar(250)
+  TypeOfCustomer               String?                   @db.NVarChar(100)
+  SalesPerson                  String?                   @db.NVarChar(100)
+  AccountManager               String?                   @db.NVarChar(100)
+  ProjectManager               String?                   @db.NVarChar(100)
+  ProductType                  String?                   @db.NVarChar(100)
+  DateOfSignUp                 DateTime?                 @db.Date
+  StripeId                     String?                   @db.VarChar(50)
+  SubscriptionStart            DateTime?                 @db.Date
+  SubscriptionEnd              DateTime?                 @db.Date
+  ActivationDate               DateTime?                 @db.Date
+  SubscriptionType             String?                   @db.NVarChar(100)
+  InvoiceEmailAddress          String?                   @db.NVarChar(250)
+  CancelledOnCalculated        DateTime?                 @db.Date
+  ReferralCode                 String?                   @db.VarChar(100)
+  CouponId                     String?                   @db.VarChar(100)
+  ChargeType                   String?                   @db.VarChar(100)
+  MaxUsersThatCanBeSetup       Int?
+  IsMigrationClient            Boolean?
+  CompanySizeOnSignup          String?                   @db.NVarChar(50)
+  DemoStatus                   String?                   @db.NVarChar(100)
+  NumberOfFreeUsers            Int?
+  CalculatedUserCount          Int?
+  LicenseFee                   Decimal?                  @db.Decimal(18, 0)
+  PaymentMethod                String?                   @db.NVarChar(50)
+  SubscriptionStatusCalculated String?                   @db.NVarChar(50)
+  SubscriptionStatus           String?                   @db.VarChar(50)
+  CanLogIn                     String?                   @db.VarChar(50)
+  FreeOrPaid                   String?                   @db.NVarChar(50)
+  Region                       String?                   @db.VarChar(10)
+  Active                       Boolean?
+  Version                      Unsupported("timestamp")?
+
+  @@schema("dbo")
+}
+
+model Company {
+  Id                         Int                       @unique
+  CompanyGuidId              String                    @id(map: "PK_Company") @default(dbgenerated("newid()"), map: "DF_Company_JlDatasetsId") @db.UniqueIdentifier
+  Name                       String                    @db.NVarChar(250)
+  Aliases                    String?                   @db.NVarChar(2000)
+  Address1                   String?                   @db.NVarChar(2000)
+  Address2                   String?                   @db.NVarChar(2000)
+  Address3                   String?                   @db.NVarChar(2000)
+  Address4                   String?                   @db.NVarChar(2000)
+  PostCode                   String?                   @db.NVarChar(15)
+  EmailAddress               String?                   @db.NVarChar(250)
+  Telephone                  String?                   @db.NVarChar(250)
+  Timestamp                  DateTime                  @default(now(), map: "DF_Company_Timestamp") @db.DateTime
+  isActive                   Boolean                   @default(true, map: "DF_Company_isActive")
+  ExpireDate                 DateTime?                 @default(now(), map: "DF_Company_ExpireDate") @db.DateTime
+  NumPdaLicences             Int                       @default(100, map: "DF_Company_NumPdaLicences")
+  NumJLLicences              Int                       @default(100, map: "DF_Company_NumJLLicences")
+  Logo                       String?                   @db.NVarChar(250)
+  IsMobileSuspended          Boolean                   @default(false, map: "DF_Company_DeactivateMobile")
+  IsWebLogicSuspended        Boolean                   @default(false, map: "DF_Company_DeactivateWebLogic")
+  serverAddress              String?                   @db.VarChar(Max)
+  saUsername                 String?                   @db.VarChar(Max)
+  saPassword                 String?                   @db.VarChar(Max)
+  IncludeInUpgrades          Boolean                   @default(true, map: "DF_Company_IncludeInUpgrades")
+  OnStop                     Boolean?
+  Website                    String?                   @db.VarChar(255)
+  ProductType                String?                   @default("JobLogic Web", map: "DF_Company_ProductType") @db.VarChar(50)
+  NoOfMobileLicenses         Int                       @default(100, map: "DF_Company_NoOfMobileLicenses")
+  NoOfWebLogicLicenses       Int                       @default(100, map: "DF_Company_NoOfWebLogicLicenses")
+  IndustryID                 Int?
+  GeoLat                     Float?
+  GeoLng                     Float?
+  Geolocation                Unsupported("geography")?
+  GeoPlaceId                 String?                   @db.VarChar(Max)
+  StripeId                   String?                   @db.VarChar(128)
+  SubscriptionStart          DateTime?                 @db.DateTime
+  SubscriptionEnd            DateTime?                 @db.DateTime
+  SubscriptionStatus         String                    @default("trialing", map: "DF_Company_SubscriptionStatus") @db.VarChar(Max)
+  PrimaryUserId              String?                   @db.UniqueIdentifier
+  SignUpPlanId               String?                   @db.VarChar(Max)
+  SubscriptionId             String?                   @db.VarChar(Max)
+  CardId                     String?                   @db.VarChar(Max)
+  CardLastFour               String?                   @db.VarChar(10)
+  CardExpire                 String?                   @db.VarChar(10)
+  InvoiceEmailAddress        String?                   @db.VarChar(Max)
+  CancelledOn                DateTime?                 @db.DateTime
+  Timezone                   String                    @default("GMT Standard Time", map: "DF_Company_Timezone") @db.VarChar(255)
+  Culture                    String                    @default("en-GB", map: "DF_Company_Culture") @db.VarChar(255)
+  Currency                   String?                   @default("GBP", map: "DF_Company_Currency") @db.NVarChar(255)
+  DateFormat                 String                    @default("dd/MM/yyyy", map: "DF_Company_DateFormat") @db.VarChar(255)
+  TimeFormat                 String                    @default("HH:mm", map: "DF_Company_TimeFormat") @db.VarChar(255)
+  gclid                      String?                   @db.VarChar(255)
+  ZohoId                     String?                   @db.VarChar(24)
+  IgnoreFromMobileProcessors Boolean                   @default(false, map: "DF_Company_IgnoreFromMobileProcessors")
+  ReferralCode               String?                   @db.VarChar(Max)
+  CouponId                   String?                   @db.VarChar(Max)
+  ChargeType                 Int                       @default(1, map: "DF_Company_ChargeType")
+  ActivationType             Int                       @default(0, map: "DF_Company_ActivationType")
+  IsInitialSetupCompleted    Boolean                   @default(false, map: "DF__tmp_ms_xx__IsIni__73C51D7B")
+  MaximumNumberOfUsers       Int?                      @default(0, map: "DF_Company_MaximumNumberOfUsers")
+  LicenceFee                 Decimal?                  @default(0, map: "DF_Company_LicenceFee") @db.Decimal(18, 0)
+  MobileLicenceFee           Decimal                   @default(0, map: "DF_Company_MobileLicenceFee") @db.Decimal(18, 0)
+  Country                    String?                   @default("United Kingdom", map: "DF_Company_Country") @db.VarChar(Max)
+  GoogleClientId             String?                   @db.VarChar(Max)
+  IndustryOther              String?                   @db.NVarChar(255)
+  NumberOfFreeUsers          Int                       @default(0, map: "Company_NumberOfFreeUsers")
+  JoblogicMode               Int                       @default(1, map: "DF_Company_JoblogicMode")
+  IsMigrationClient          Boolean                   @default(false, map: "Company_IsMigrationClient")
+  IsTestAccount              Boolean                   @default(false, map: "Company_IsTestAccount")
+  TypeOfCustomerId           Int?
+  NumberOfUserId             Int?
+  CancellationReason         String?
+  QualificationSize          String?                   @db.VarChar(50)
+  DemoStatus                 String?                   @db.VarChar(100)
+  ActivationDate             DateTime?                 @db.DateTime
+  DealOwner                  String?                   @db.NVarChar(100)
+  IsCleared                  Boolean                   @default(false, map: "DF__tmp_ms_xx__IsCle__7C5A637C")
+  SalesPersonId              Int?
+  AccountManagerId           Int?
+  TrainerId                  Int?
+  FirstDayOfWeek             String                    @default("1", map: "DF_Company_FirstDayOfWeek") @db.VarChar(50)
+  PaymentMethodId            String?                   @db.VarChar(50)
+  PaymentStatus              Int                       @default(0, map: "DF__tmp_ms_xx__Payme__7E42ABEE")
+  InvoiceSMS                 String?                   @db.VarChar(20)
+  AccountId                  Int?
+  ProjectManagerId           Int?
+  ClearDataDate              DateTime?                 @db.DateTime
+  DemoBookingDate            DateTime?                 @db.DateTime
+  CountryCode                String?                   @db.Char(3)
+  Region                     String?                   @db.Char(2)
+  GroupId                    Int?                      @unique
+  CustomerJourneyStageId     Int?                      @default(1, map: "DF_Company_CustomerJourneyStageId")
+  ActiveCampaignId           Int?
+  PipeDriveId                Int?
+  XeroId                     String?                   @db.UniqueIdentifier
+  HasSubcontractor           Boolean                   @default(false, map: "DF__tmp_ms_xx__HasSu__002AF460")
+  Version                    Bytes?                    @db.VarBinary(8)
+  DestinationVersion         Unsupported("timestamp")? @unique(map: "IX_Unique_Version")
+  IMPrivileged               Boolean                   @default(false, map: "DF__tmp_ms_xx__IMPri__011F1899")
+  ShardKey                   String?                   @db.VarChar(5)
+  IsFrozen                   Boolean                   @default(false, map: "DF__tmp_ms_xx__IsFro__02133CD2")
+  Language                   String?                   @db.VarChar(50)
+  Tracker_Tasks              Tracker_Tasks[]
+  Tracker_Client_Groups      Tracker_Client_Groups?    @relation(fields: [GroupId], references: [Id])
+
+  @@index([ProductType, isActive, IgnoreFromMobileProcessors], map: "nci_wi_Company_1E65896BB4787EEE36396F9979F688FE")
+  @@index([CompanyGuidId], map: "nci_wi_Company_8FFD659DB838291EEE2A0FC148B76357")
+  @@index([IgnoreFromMobileProcessors, isActive, ProductType], map: "nci_wi_Company_A143A13B8E4FE6A8BE7689940F927570")
+  @@schema("tbl_Rep")
+}
+
+model JobLogicMobile_Company_Settings {
+  Id                 Int                       @id(map: "PK_JobLogicMobile_Company_Settings")
+  CompanyId          Int
+  DefaultSettingId   Int
+  Value              String                    @db.NVarChar(255)
+  Active             Boolean                   @default(true, map: "DF_JobLogicMobile_Company_Settings_Active")
+  Timestamp          DateTime                  @default(now(), map: "DF_JobLogicMobile_Company_Settings_Timestamp") @db.DateTime
+  Version            Bytes?                    @db.VarBinary(8)
+  DestinationVersion Unsupported("timestamp")?
+  TenantId           String                    @default(dbgenerated("00000000-0000-0000-0000-000000000000"), map: "DF__JobLogicM__Tenan__08012052") @db.UniqueIdentifier
+
+  @@index([CompanyId, Active, DefaultSettingId], map: "nci_wi_JobLogicMobile_Company_Settings_FDF084A9474061ED527A54D90A67A65D")
+  @@schema("tbl_Rep")
+}
+
+model JobLogicMobile_Company_Settings_Audit {
+  Id                     Int                       @id(map: "PK_JobLogicMobile_Company_Settings_Audit")
+  MobileCompanySettingId Int
+  UserId                 Int
+  OldValue               String                    @db.VarChar(255)
+  NewValue               String                    @db.VarChar(255)
+  Timestamp              DateTime                  @default(now(), map: "DF_JobLogicMobile_Company_Settings_Audit_Timestamp") @db.DateTime
+  Version                Bytes?                    @db.VarBinary(8)
+  DestinationVersion     Unsupported("timestamp")?
+  TenantId               String                    @default(dbgenerated("00000000-0000-0000-0000-000000000000"), map: "DF__JobLogicM__Tenan__070CFC19") @db.UniqueIdentifier
+
+  @@schema("tbl_Rep")
+}
+
+model JobLogicMobile_DefaultSettings {
+  Id                      Int                       @id(map: "PK_JobLogicMobile_DefaultSettings")
+  Key                     String                    @db.VarChar(255)
+  Value                   String                    @db.VarChar(255)
+  Active                  Boolean                   @default(true, map: "DF_JobLogicMobile_DefaultSettings_Active")
+  Timestamp               DateTime                  @default(now(), map: "DF_JobLogicMobile_DefaultSettings_Timestamp") @db.DateTime
+  Description             String?                   @db.VarChar(255)
+  JobLogicWebDefaultValue String                    @db.VarChar(255)
+  Version                 Bytes?                    @db.VarBinary(8)
+  DestinationVersion      Unsupported("timestamp")?
+
+  @@schema("tbl_Rep")
+}
+
+model JobLogicMobile_Forms {
+  Id                         Int
+  Description                String                    @db.NVarChar(255)
+  Label                      String                    @db.NVarChar(255)
+  FormType                   String                    @db.VarChar(50)
+  EFVDllName                 String?                   @db.NVarChar(255)
+  ViewName                   String                    @db.VarChar(255)
+  CompatibleJobLogicVersions String?                   @default("7.0.0.6 and above", map: "DF_JobLogicMobile_Forms_CompatibleJobLogicVersions") @db.VarChar(255)
+  Icon                       String                    @default("icon-file medium", map: "DF_JobLogicMobile_Forms_Icon") @db.VarChar(255)
+  IsHtml                     Boolean                   @default(false, map: "DF_JobLogicMobile_Forms_IsHtml")
+  ShowInFormsList            Boolean                   @default(false, map: "DF_JobLogicMobile_Forms_ShowInFormsList")
+  ShowInAssetsList           Boolean                   @default(false, map: "DF_JobLogicMobile_Forms_ShowInAssetsList")
+  ShowOnArrival              Boolean                   @default(false, map: "DF_JobLogicMobile_Forms_ShowOnArrival")
+  ShowOnComplete             Boolean                   @default(false, map: "DF_JobLogicMobile_Forms_ShowOnComplete")
+  IsMandatory                Boolean                   @default(false, map: "DF_JobLogicMobile_Forms_IsMandatory")
+  GenerateAttachment         Boolean                   @default(false, map: "DF_JobLogicMobile_Forms_GenerateAttachment")
+  GenerateOnCompletion       Boolean                   @default(false, map: "DF_JobLogicMobile_Forms_GenerateOnCompletion")
+  AttachOnCompletion         Boolean                   @default(false, map: "DF_JobLogicMobile_Forms_AttachOnCompletion")
+  Active                     Boolean                   @default(true, map: "DF_JobLogicMobile_Forms_Active")
+  Timestamp                  DateTime                  @default(now(), map: "DF_JobLogicMobile_Forms_Timestamp") @db.DateTime
+  DefaultDataRequired        String?                   @db.VarChar(255)
+  FormReviewUrl              String?                   @db.VarChar(256)
+  IsJsSurveyForm             Boolean?
+  JsSurveyFormJson           String?                   @db.NVarChar(Max)
+  ShowOnAccept               Boolean                   @default(false, map: "DF__tmp_ms_xx__ShowO__2FDA0782")
+  ShowOnTravel               Boolean                   @default(false, map: "DF__tmp_ms_xx__ShowO__30CE2BBB")
+  ShowOnAbandonTravel        Boolean                   @default(false, map: "DF__tmp_ms_xx__ShowO__31C24FF4")
+  ShowOnLeaveSite            Boolean                   @default(false, map: "DF__tmp_ms_xx__ShowO__32B6742D")
+  ShowOnReject               Boolean                   @default(false, map: "DF__tmp_ms_xx__ShowO__33AA9866")
+  ShowOnAbort                Boolean                   @default(false, map: "DF__tmp_ms_xx__ShowO__349EBC9F")
+  ShowInHomeFormList         Boolean?                  @default(false, map: "DF__tmp_ms_xx__ShowI__3592E0D8")
+  Frequency                  Int?                      @default(0, map: "DF__tmp_ms_xx__Frequ__36870511")
+  FrequencyType              Int?                      @default(0, map: "DF__tmp_ms_xx__Frequ__377B294A")
+  WeekDays                   String?                   @db.VarChar(50)
+  ScheduledTime              DateTime?                 @db.Time
+  NewFrequency               Int?                      @default(0, map: "DF__tmp_ms_xx__NewFr__386F4D83")
+  Version                    Bytes?                    @db.VarBinary(8)
+  DestinationVersion         Unsupported("timestamp")?
+  UniqueGuid                 String                    @id(map: "PK_JobLogicMobile_Forms") @db.UniqueIdentifier
+
+  @@schema("tbl_Rep")
+}
+
+model JobLogicWeb_Users {
+  Id                       Int                       @id(map: "PK_JobLogicWeb_Users")
+  GuidId                   String                    @unique(map: "IX_Unique_GuidId") @default(dbgenerated("newid()"), map: "DF_JobLogicWeb_Users_GuidId") @db.UniqueIdentifier
+  Token                    String?                   @db.UniqueIdentifier
+  TenantId                 String                    @db.UniqueIdentifier
+  JoblogicId               String                    @db.NVarChar(30)
+  Name                     String                    @db.NVarChar(255)
+  EmailAddress             String                    @db.NVarChar(256)
+  Password                 String                    @db.NVarChar(128)
+  LastLoginDate            DateTime?                 @db.DateTime
+  FailedAttemptsCount      Int                       @default(0, map: "DF_JobLogicWeb_Users_FailedAttemptsCount")
+  LastFailedAttemptDate    DateTime?                 @db.DateTime
+  Active                   Boolean                   @default(true, map: "DF_JobLogicWeb_Users_Active")
+  Timestamp                DateTime                  @default(now(), map: "DF_JobLogicWeb_Users_Timestamp") @db.DateTime
+  IsSuspended              Boolean                   @default(false, map: "DF_JobLogicWeb_Users_Deactivate")
+  ProfilePicture           String?                   @db.NVarChar(200)
+  ViewBilling              Boolean                   @default(false, map: "DF_JobLogicWeb_Users_ViewBilling")
+  UIVersion                String                    @default("NEW", map: "DF_JobLogicWeb_Users_UIVersion") @db.VarChar(255)
+  AuthenticationCode       String?                   @db.VarChar(Max)
+  ActiveCampaignHash       String?                   @db.UniqueIdentifier
+  IdentityUserId           String?                   @db.NVarChar(450)
+  MobileAuthenticationCode String?                   @db.VarChar(Max)
+  UpdatedAt                DateTime                  @default(dbgenerated("getutcdate()"), map: "DF_JobLogicWeb_Users_UpdatedAt") @db.DateTimeOffset
+  Version                  Bytes?                    @db.VarBinary(8)
+  DestinationVersion       Unsupported("timestamp")?
+
+  @@index([TenantId, Active], map: "nci_wi_JobLogicWeb_Users_5B3F84579C8E2CE9DD3509AC33FC6D9C")
+  @@index([Active, EmailAddress], map: "nci_wi_JobLogicWeb_Users_B63D005AB63F9886AC55886380F6DB29")
+  @@schema("tbl_Rep")
+}
+
+model sysdiagrams {
+  name         String @db.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B617AB0E2F0") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
+  @@schema("dbo")
+}
+
+model Tracker_Audit {
+  Id                     Int                     @id(map: "PK_Tracker_Audit") @default(autoincrement())
+  TypeId                 Int
+  SubTypeId              Int?
+  UserId                 Int
+  OldValue               String                  @db.VarChar(Max)
+  NewValue               String                  @db.VarChar(Max)
+  Timestamp              DateTime                @default(now(), map: "DF_Tracker_Audit_Timestamp") @db.DateTime
+  AuditedItemIntId       Int?
+  AuditedItemGuidId      String?                 @db.UniqueIdentifier
+  Tracker_Audit_SubTypes Tracker_Audit_SubTypes? @relation(fields: [SubTypeId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Audit_Tracker_Audit_SubTypes")
+  Tracker_Audit_Types    Tracker_Audit_Types     @relation(fields: [TypeId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Audit_Tracker_Audit_Types")
+  Tracker_Users          Tracker_Users           @relation(fields: [UserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Audit_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_Audit_SubTypes {
+  Id                  Int                 @id(map: "PK_Tracker_Audit_SubTypes") @default(autoincrement())
+  TypeId              Int
+  Description         String              @db.NVarChar(250)
+  Timestamp           DateTime            @default(now(), map: "DF_Tracker_Audit_SubTypes_Timestamp") @db.DateTime
+  Tracker_Audit       Tracker_Audit[]
+  Tracker_Audit_Types Tracker_Audit_Types @relation(fields: [TypeId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Audit_SubTypes_Tracker_Audit_Types")
+
+  @@schema("dbo")
+}
+
+model Tracker_Audit_Types {
+  Id                     Int                      @id(map: "PK_Tracker_Audit_Types") @default(autoincrement())
+  Description            String                   @db.NVarChar(250)
+  Timestamp              DateTime                 @default(now(), map: "DF_Tracker_Audit_Types_Timestamp") @db.DateTime
+  Tracker_Audit          Tracker_Audit[]
+  Tracker_Audit_SubTypes Tracker_Audit_SubTypes[]
+
+  @@schema("dbo")
+}
+
+model Tracker_CallTypes {
+  Id                              Int                               @id(map: "PK_Tracker_Call_Type") @default(autoincrement())
+  Description                     String                            @db.VarChar(1000)
+  Active                          Boolean                           @default(true, map: "DF_Tracker_Call_Type_Active")
+  Timestamp                       DateTime                          @default(now(), map: "DF_Tracker_Call_Type_Timestamp") @db.DateTime
+  Tracker_Task_Domain_Assignments Tracker_Task_Domain_Assignments[]
+  Tracker_Tasks                   Tracker_Tasks[]
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_AccountManagers {
+  Id        Int      @id(map: "PK_Tracker_Client_AccountManagers") @default(autoincrement())
+  UserId    Int?
+  Postcode  String?  @db.VarChar(50)
+  Active    Boolean  @default(true, map: "DF_Tracker_Client_AccountManagers_Active")
+  Timestamp DateTime @default(now(), map: "DF_Tracker_Client_AccountManagers_Timestamp") @db.DateTime
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_AssignedUser_Audit {
+  Id                                      Int                                     @id(map: "PK_Tracker_Client_AssignedUser_Audit") @default(autoincrement())
+  ClientId                                Int
+  ChangedByUserId                         Int
+  TypeId                                  Int
+  OldUserId                               Int?
+  NewUserId                               Int?
+  Timestamp                               DateTime                                @default(now(), map: "DF_Tracker_Client_AssignedUser_Audit_Timestamp") @db.DateTime
+  Tracker_Client_AssignedUser_Audit_Types Tracker_Client_AssignedUser_Audit_Types @relation(fields: [TypeId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Client_AssignedUser_Audit_Tracker_Client_AssignedUser_Audit_Types")
+  Tracker_Users                           Tracker_Users                           @relation(fields: [ChangedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Client_AssignedUser_Audit_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_AssignedUser_Audit_Types {
+  Id                                Int                                 @id(map: "PK_Tracker_Client_AssignedUser_Audit_Types") @default(autoincrement())
+  Description                       String                              @db.NVarChar(250)
+  Timestamp                         DateTime                            @default(now(), map: "DF_Tracker_Client_AssignedUser_Audit_Types_Timestamp") @db.DateTime
+  Tracker_Client_AssignedUser_Audit Tracker_Client_AssignedUser_Audit[]
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_Attachments {
+  Id                 Int            @id(map: "PK_Tracker_Client_Attachments") @default(autoincrement())
+  ClientId           Int
+  Filepath           String?        @db.NVarChar(Max)
+  Active             Boolean        @default(true, map: "DF_Tracker_Client_Attachments_Active")
+  Timestamp          DateTime       @default(now(), map: "DF_Tracker_Client_Attachments_Timestamp") @db.DateTime
+  Filename           String?        @db.NVarChar(Max)
+  UniqueFilename     String?        @db.NVarChar(Max)
+  AzureBlobReference String?        @db.VarChar(255)
+  AttachmentType     Int            @default(0, map: "DF_Tracker_Client_Attachments_AttachmentType")
+  AuthorUserId       Int?
+  Tracker_Users      Tracker_Users? @relation(fields: [AuthorUserId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Client_Attachments_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_Audit {
+  Id                        Int                       @id(map: "PK_Tracker_Audit_Client") @default(autoincrement())
+  ClientId                  Int
+  TypeId                    Int
+  UserId                    Int
+  OldValue                  String?                   @db.NVarChar(4000)
+  NewValue                  String?                   @db.NVarChar(4000)
+  Timestamp                 DateTime?                 @default(now(), map: "DF_Tracker_Client_Audit_Timestamp") @db.DateTime
+  Tracker_Client_Audit_Type Tracker_Client_Audit_Type @relation(fields: [TypeId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Audit_Client_Tracker_Client_Audit_Type")
+  Tracker_Users             Tracker_Users             @relation(fields: [UserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Audit_Client_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_Audit_Forms {
+  Id            Int           @id(map: "PK_Tracker_Client_Audit_Forms") @default(autoincrement())
+  ActionType    Int
+  UserId        Int
+  CompanyId     Int
+  FormId        Int
+  CompanyFormId Int
+  OldData       String?       @db.VarChar(265)
+  NewData       String?       @db.VarChar(265)
+  Timestamp     DateTime?     @default(now(), map: "DF_Tracker_Client_Audit_Forms_Timestamp") @db.DateTime
+  Tracker_Users Tracker_Users @relation(fields: [UserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Client_Audit_Forms_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_Audit_Payment {
+  Id            Int           @id(map: "PK_Tracker_Client_Audit_Payment") @default(autoincrement())
+  ClientId      Int
+  ChangesType   Int
+  OrginalValue  String?       @db.VarChar(Max)
+  NewValue      String?       @db.VarChar(Max)
+  UserId        Int
+  Active        Boolean       @default(true, map: "DF_Tracker_Client_Audit_Payment_Active")
+  Timestamp     DateTime      @default(now(), map: "DF_Tracker_Client_Audit_Payment_Timestamp") @db.DateTime
+  Tracker_Users Tracker_Users @relation(fields: [UserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Client_Audit_Payment_LoggedUser")
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_Audit_Type {
+  Id                   Int                    @id(map: "PK_Tracker_Client_Audit_Type")
+  Description          String                 @db.NVarChar(200)
+  Timestamp            DateTime?              @default(now(), map: "DF_Tracker_Client_Audit_Type_Timestamp") @db.DateTime
+  Tracker_Client_Audit Tracker_Client_Audit[]
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_CalculatedSubscription_Paid {
+  Id                                     Int                                      @id(map: "PK_Tracker_Client_CalculatedSubscription_Paid")
+  Description                            Int
+  Tracker_Client_CalculatedSubscriptions Tracker_Client_CalculatedSubscriptions[]
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_CalculatedSubscription_Subscription {
+  Id                                     Int                                      @id(map: "PK_Tracker_Client_CalculatedSubscription_Subscription")
+  Description                            Int
+  Tracker_Client_CalculatedSubscriptions Tracker_Client_CalculatedSubscriptions[]
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_CalculatedSubscriptions {
+  ClientId                                           Int                                                @id(map: "PK_Tracker_Client_CalculatedSubscription")
+  SubscriptionId                                     Int
+  PaidId                                             Int
+  Tracker_Client_CalculatedSubscription_Paid         Tracker_Client_CalculatedSubscription_Paid         @relation(fields: [PaidId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Client_CalculatedSubscription_Tracker_Client_CalculatedSubscription_Paid")
+  Tracker_Client_CalculatedSubscription_Subscription Tracker_Client_CalculatedSubscription_Subscription @relation(fields: [SubscriptionId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Client_CalculatedSubscription_Tracker_Client_CalculatedSubscription_Subscription")
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_Contacts {
+  Id              Int      @id(map: "PK_Tracker_Client_Contacts") @default(autoincrement())
+  ClientId        Int
+  Name            String   @db.VarChar(1000)
+  Telephone       String?  @db.VarChar(1000)
+  MobileTelephone String?  @db.VarChar(1000)
+  Email           String?  @db.VarChar(1000)
+  ContactTypeId   Int      @default(1, map: "DF_Tracker_Client_Contacts_ContactTypeId")
+  Active          Boolean  @default(true, map: "DF_Tracker_Client_Contacts_Active")
+  SendNewsletter  Boolean  @default(false, map: "DF_Tracker_Client_Contacts_SendNewsletter")
+  Timestamp       DateTime @default(now(), map: "DF_Tracker_Client_Contacts_Timestamp") @db.DateTime
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_CustomerJourneyStages {
+  Id                       Int                       @id(map: "PK_Tracker_Client_Stages") @default(autoincrement())
+  Description              String                    @db.VarChar(64)
+  DepartmentId             Int?
+  Timestamp                DateTime                  @default(now(), map: "DF_Tracker_Client_Stages_Timestamp") @db.DateTime
+  isActive                 Boolean                   @default(true, map: "DF_Tracker_Client_CustomerJourneyStages_Active")
+  Tracker_User_Departments Tracker_User_Departments? @relation(fields: [DepartmentId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Client_CustomerJourneyStages_Tracker_Users_Departments")
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_Group_Audit {
+  Id                               Int                              @id(map: "PK_Tracker_Client_Group_Audit") @default(autoincrement())
+  GroupId                          Int
+  TypeId                           Int
+  UserId                           Int
+  OldValue                         String                           @db.VarChar(255)
+  NewValue                         String                           @db.VarChar(255)
+  Timestamp                        DateTime                         @default(now(), map: "DF_Tracker_Client_Group_Audit_Timestamp") @db.DateTime
+  Tracker_Client_Group_Audit_Types Tracker_Client_Group_Audit_Types @relation(fields: [TypeId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Client_Group_Audit_Tracker_Client_Group_Audit_Types")
+  Tracker_Client_Groups            Tracker_Client_Groups            @relation(fields: [GroupId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Client_Group_Audit_Tracker_Client_Groups")
+  Tracker_Users                    Tracker_Users                    @relation(fields: [UserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Client_Group_Audit_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_Group_Audit_Types {
+  Id                         Int                          @id(map: "PK_Tracker_Client_Group_Audit_Types") @default(autoincrement())
+  Description                String                       @db.NVarChar(250)
+  Timestamp                  DateTime                     @default(now(), map: "DF_Tracker_Client_Group_Audit_Types_Timestamp") @db.DateTime
+  Tracker_Client_Group_Audit Tracker_Client_Group_Audit[]
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_Groups {
+  Id                         Int                          @id(map: "PK_Tracker_Client_Groups") @default(autoincrement())
+  Name                       String                       @db.NVarChar(250)
+  ParentClientId             Int
+  Timestamp                  DateTime                     @default(now(), map: "DF_Tracker_Client_Groups_Timestamp") @db.DateTime
+  Active                     Boolean                      @default(true, map: "DF_Tracker_Client_Groups_Active")
+  Deleted                    Boolean                      @default(false, map: "DF_Tracker_Client_Groups_Deleted")
+  Tracker_Client_Group_Audit Tracker_Client_Group_Audit[]
+  Company                    Company[]                    @relation
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_Industries {
+  ID          Int      @id(map: "PK_TrackerClient_Industries") @default(autoincrement())
+  Description String   @db.NVarChar(250)
+  Active      Boolean  @default(true, map: "DF_TrackerClient_Industries_Active")
+  Timestamp   DateTime @default(now(), map: "DF_TrackerClient_Industries_Timestamp") @db.DateTime
+  Icon        String?  @db.VarChar(50)
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_MigrationDetails {
+  Id                      Int       @id(map: "PK__Tracker___3214EC07B8BCDB61") @default(autoincrement())
+  ClientId                Int
+  MigratedFromOtherSystem Boolean?  @default(false, map: "DF__Tracker_C__Migra__67FE6514")
+  SystemMigratedFrom      String?   @db.NVarChar(200)
+  Timestamp               DateTime? @default(now(), map: "DF__Tracker_C__Times__68F2894D") @db.DateTime
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_MigrationDetails_Audit {
+  Id                      Int           @id(map: "PK__Tracker___3214EC07F3B63A55") @default(autoincrement())
+  ClientId                Int
+  ChangedByUserId         Int
+  MigratedFromDesktop     Boolean?      @default(false, map: "DF__Tracker_C__Migra__69E6AD86")
+  MigratedFromOtherSystem Boolean?      @default(false, map: "DF__Tracker_C__Migra__6ADAD1BF")
+  SystemMigratedFrom      String?       @db.NVarChar(200)
+  Timestamp               DateTime?     @default(now(), map: "DF__Tracker_C__Times__6BCEF5F8") @db.DateTime
+  Tracker_Users           Tracker_Users @relation(fields: [ChangedByUserId], references: [Id], onUpdate: NoAction, map: "FK_MigrationDetails_ChangeByUserId")
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_Notes {
+  Id                                                                Int            @id(map: "PK_Tracker_Client_Notes") @default(autoincrement())
+  ClientId                                                          Int
+  Note                                                              String         @db.VarChar(Max)
+  AuthorUserId                                                      Int
+  DeletedbyUserId                                                   Int?
+  DeletionDate                                                      DateTime?      @db.Date
+  Active                                                            Boolean        @default(true, map: "DF_Tracker_Client_Notes_Active")
+  Timestamp                                                         DateTime       @default(now(), map: "DF_Tracker_Client_Notes_Timestamp") @db.DateTime
+  Tracker_Users_Tracker_Client_Notes_AuthorUserIdToTracker_Users    Tracker_Users  @relation("Tracker_Client_Notes_AuthorUserIdToTracker_Users", fields: [AuthorUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Client_Notes_Client_Author")
+  Tracker_Users_Tracker_Client_Notes_DeletedbyUserIdToTracker_Users Tracker_Users? @relation("Tracker_Client_Notes_DeletedbyUserIdToTracker_Users", fields: [DeletedbyUserId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Client_Notes_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_OnStop {
+  Id                            Int                           @id(map: "PK_Tracker_ClientOnStop") @default(autoincrement())
+  ClientId                      Int
+  ReasonOnStopSelectId          Int
+  RenewSupportFee               String?                       @db.VarChar(50)
+  DateOnStop                    DateTime                      @db.DateTime
+  Note                          String?                       @db.VarChar(Max)
+  Active                        Boolean?                      @default(true, map: "DF_Tracker_ClientOnStop_Active")
+  Timestamp                     DateTime?                     @default(now(), map: "DF_Tracker_ClientOnStop_Timestamp") @db.DateTime
+  PutOnStopById                 Int?
+  Tracker_Client_ReasonForStops Tracker_Client_ReasonForStops @relation(fields: [ReasonOnStopSelectId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Client_OnStop_Reasons_SelectId")
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_Package_Types {
+  Id          Int       @id(map: "PK_Tracker_Client_Package_Types") @default(autoincrement())
+  Description String    @db.NVarChar(200)
+  Timestamp   DateTime? @default(now(), map: "DF_Tracker_Client_Package_Types_Timestamp") @db.DateTime
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_Products {
+  Id                     Int             @id(map: "PK_Tracker_Client_Products") @default(autoincrement())
+  ClientId               Int
+  ProductNameSelectId    Int
+  ProductVersion         String?         @db.VarChar(100)
+  ProductVersInstallDate DateTime?       @db.DateTime
+  NoOfLicences           Int?
+  Active                 Boolean         @default(true, map: "DF_Tracker_Client_Products_Active")
+  Timestamp              DateTime        @default(now(), map: "DF_Tracker_Client_Products_Timestamp") @db.DateTime
+  Tracker_Tasks          Tracker_Tasks[]
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_ReasonForStops {
+  Id                    Int                     @id(map: "PK_Tracker_Client_ReasonForStops") @default(autoincrement())
+  ReasonForStop         String                  @db.VarChar(Max)
+  Active                Boolean                 @default(true, map: "DF_Tracker_Client_ReasonForStops_Active")
+  TimeStamp             DateTime                @default(now(), map: "DF_Tracker_Client_ReasonForStops_TimeStamp") @db.DateTime
+  Tracker_Client_OnStop Tracker_Client_OnStop[]
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_TestDetails {
+  Id            Int            @id(map: "PK_Tracker_Client_TestDetails") @default(autoincrement())
+  ClientId      Int
+  IsTest        Boolean
+  OwnerId       Int?
+  Reason        String?        @db.NVarChar(4000)
+  Timestamp     DateTime       @default(now(), map: "DF_Tracker_Client_TestDetails_Timestamp") @db.DateTime
+  Tracker_Users Tracker_Users? @relation(fields: [OwnerId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Client_TestDetails_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_TestDetails_Audit {
+  Id                                                                            Int            @id(map: "PK_Tracker_Client_TestDetails_Audit") @default(autoincrement())
+  ClientId                                                                      Int
+  IsTest                                                                        Boolean
+  ChangedByUserId                                                               Int
+  OwnerId                                                                       Int?
+  Reason                                                                        String?        @db.NVarChar(4000)
+  Timestamp                                                                     DateTime       @default(now(), map: "DF_Tracker_Client_TestDetails_Audit_Timestamp") @db.DateTime
+  Tracker_Users_Tracker_Client_TestDetails_Audit_ChangedByUserIdToTracker_Users Tracker_Users  @relation("Tracker_Client_TestDetails_Audit_ChangedByUserIdToTracker_Users", fields: [ChangedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Client_TestDetails_Audit_ChangedByUserId_Tracker_Users")
+  Tracker_Users_Tracker_Client_TestDetails_Audit_OwnerIdToTracker_Users         Tracker_Users? @relation("Tracker_Client_TestDetails_Audit_OwnerIdToTracker_Users", fields: [OwnerId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Client_TestDetails_Audit_OwnerId_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_Client_UsageStatistics {
+  Id                           Int      @id(map: "PK_Tracker_Client_UsageStatistics") @default(autoincrement())
+  CanConnect                   Boolean  @default(false, map: "DF_Tracker_Client_UsageStatistics_CanConnect")
+  ConnectionError              String?  @db.VarChar(Max)
+  CompanyId                    Int
+  NoOfJobs                     Int?
+  NoOfVisitsCompletedOnMobile  Int?
+  NoOfQuotes                   Int?
+  NoOfInvoices                 Int?
+  TotalValueOfInvoices         Float?   @db.Money
+  NoOfTrackerTasksLogged       Int?
+  TotalValueOfTMSOrderInvoices Float?   @db.Money
+  Timestamp                    DateTime @default(now(), map: "DF_Tracker_Client_UsageStatistics_Timestamp") @db.DateTime
+  Active                       Boolean  @default(true, map: "DF_Tracker_Client_UsageStatistics_Active")
+  PPMContractsAdded            Int?
+  PurchaseOrdersRaised         Int?
+  BackOfficeUserAdded          Int?
+  MobileUsersAdded             Int?
+  DeployedToMobile             Int?
+  LoginToCustomerPortal        Int?
+  TypeOfPayment                Int?
+  LicenseFee                   Decimal? @db.Decimal(18, 0)
+  MobileLicenseFee             Decimal? @db.Decimal(18, 0)
+  RefcomLogbookLogged          Int?
+  NoOfImports                  Int?
+  InvoicePaymentsRaisedManual  Int?
+  InvoicePaymentsRaisedStripe  Int?
+  CompanyName                  String?  @db.VarChar(Max)
+  CompanyEmail                 String?  @db.VarChar(250)
+  SubscriptionStatus           String?  @db.VarChar(250)
+  NoOfXeroInvoiceSyncs         Int?
+  NoOfXeroTaxCodeSyncs         Int?
+  NoOfXeroNominalCodeSyncs     Int?
+  TenantId                     String?  @db.UniqueIdentifier
+
+  @@schema("dbo")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Tracker_Client_WarningNotices {
+  Id            Int      @default(autoincrement())
+  ClientId      Int?
+  Message       String?  @db.NVarChar(Max)
+  Type          String   @db.NVarChar(Max)
+  ShownOnScreen Boolean
+  Active        Boolean  @default(true, map: "DF_Tracker_Client_WarningNotices_Active")
+  Timestamp     DateTime @default(now(), map: "DF_Tracker_Client_WarningNotices_Timestamp") @db.DateTime
+  ClientGroupId Int?
+
+  @@ignore
+  @@schema("dbo")
+}
+
+model Tracker_ContactTypes {
+  Id          Int      @id(map: "PK_Tracker_ContactTypes") @default(autoincrement())
+  Description String   @db.VarChar(Max)
+  Active      Boolean  @default(true, map: "DF_Tracker_ContactTypes_Active")
+  Timestamp   DateTime @default(now(), map: "DF_Tracker_ContactTypes_Timestamp") @db.DateTime
+
+  @@schema("dbo")
+}
+
+model Tracker_CustomerJourneyStage_Details {
+  CompanyId                   Int                 @id(map: "PK_Tracker_CustomerJourneyStage_Details")
+  TrialStarted                DateTime?           @db.DateTime
+  SaleNotClosed               Boolean             @default(false, map: "DF_Tracker_CustomerJourneyStage_Details_SaleNotClosed")
+  SaleNotClosedReason         String?             @db.NVarChar(400)
+  PlannedSubscriptionStart    DateTime?           @db.DateTime
+  PlannedSubscriptionEnd      DateTime?           @db.DateTime
+  PandaDocLink                String?             @db.NVarChar(200)
+  PackageType                 Int?
+  SalesCloseDate              DateTime?           @db.DateTime
+  DateWithAccounts            DateTime?           @db.DateTime
+  InvoiceNumber               String?             @db.NVarChar(200)
+  DateInvoiceSent             DateTime?           @db.DateTime
+  InvoicePaidDate             DateTime?           @db.DateTime
+  InvoicePaid                 Boolean             @default(false, map: "DF_Tracker_CustomerJourneyStage_Details_InvoicePaid")
+  CustomerWillNotPay          Boolean             @default(false, map: "DF_Tracker_CustomerJourneyStage_Details_CustomerWillNotPay")
+  DateWithOnboarding          DateTime?           @db.DateTime
+  OnboardingAcceptedDate      DateTime?           @db.DateTime
+  PlannedGoLiveDate           DateTime?           @db.DateTime
+  ActualGoLiveDate            DateTime?           @db.DateTime
+  DateWithCustomerSuccess     DateTime?           @db.DateTime
+  CustomerSuccessAcceptedDate DateTime?           @db.DateTime
+  PlannedActivationType       Int?
+  SubscriptionChangeRequired  Int                 @default(0, map: "DF_Tracker_CustomerJourneyStage_Details_SubscriptionChangeRequired")
+  DateWithSales               DateTime?           @db.DateTime
+  TeamId                      Int?
+  IsColdLead                  Boolean             @default(false, map: "DF_Tracker_CustomerJourneyStage_Details_IsColdLead")
+  Tracker_User_Teams          Tracker_User_Teams? @relation(fields: [TeamId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_CustomerJourneyStage_Details_Tracker_User_Teams")
+
+  @@schema("dbo")
+}
+
+model Tracker_Dashboard_Categories {
+  Id                 Int                  @id(map: "PK_Tracker_Dashboard_Categories") @default(autoincrement())
+  Description        String               @db.VarChar(200)
+  Active             Boolean              @default(true, map: "DF_Tracker_Dashboard_Categories_Active")
+  Timestamp          DateTime             @default(now(), map: "DF_Tracker_Dashboard_Categories_Timestamp") @db.DateTime
+  Tracker_Dashboards Tracker_Dashboards[]
+
+  @@schema("dbo")
+}
+
+model Tracker_Dashboards {
+  Id                           Int                          @id(map: "PK_Tracker_Dashboards") @default(autoincrement())
+  Description                  String                       @db.VarChar(200)
+  CategoryId                   Int
+  Link                         String                       @db.NVarChar(200)
+  Primary                      Boolean                      @default(false, map: "DF_Tracker_Dashboards_Primary")
+  Active                       Boolean                      @default(true, map: "DF_Tracker_Dashboards_Active")
+  Timestamp                    DateTime                     @default(now(), map: "DF_Tracker_Dashboards_Timestamp") @db.DateTime
+  Tracker_Dashboard_Categories Tracker_Dashboard_Categories @relation(fields: [CategoryId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Dashboards_Tracker_Dashboard_Categories")
+
+  @@schema("dbo")
+}
+
+model Tracker_Invoice_Lines {
+  Id               Int              @id(map: "PK_Tracker_Invoice_Lines") @default(autoincrement())
+  InvoiceId        Int
+  ItemCode         String           @db.VarChar(200)
+  Description      String           @db.VarChar(200)
+  Quantity         Int
+  UnitAmount       Float            @db.Money
+  TaxType          String?          @db.VarChar(200)
+  TaxAmount        Float?           @db.Money
+  DiscountAmount   Float?           @db.Money
+  DiscountType     Int?
+  AccountCode      String?          @db.VarChar(200)
+  LineAmount       Float            @db.Money
+  Timestamp        DateTime?        @default(now(), map: "DF_Tracker_Invoice_Lines_Timestamp") @db.DateTime
+  CreatedByUserId  Int
+  SyncStatus       Int?
+  Tracker_Invoices Tracker_Invoices @relation(fields: [InvoiceId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Invoice_Lines_Tracker_Invoices")
+  Tracker_Users    Tracker_Users    @relation(fields: [CreatedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Invoice_Lines_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_Invoices {
+  Id                    Int                     @id(map: "PK_Tracker_Invoices") @default(autoincrement())
+  ClientId              Int
+  Type                  Int
+  Status                Int
+  Date                  DateTime                @db.DateTime
+  DueDate               DateTime                @db.DateTime
+  Reference             String?                 @db.VarChar(200)
+  SyncedToXeroContact   String?                 @db.UniqueIdentifier
+  XeroInvoiceNumber     String?                 @db.VarChar(200)
+  Timestamp             DateTime?               @default(now(), map: "DF_Tracker_Invoices_Timestamp") @db.DateTime
+  CreatedByUserId       Int
+  SyncStatus            Int?
+  Tracker_Invoice_Lines Tracker_Invoice_Lines[]
+  Tracker_Users         Tracker_Users           @relation(fields: [CreatedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Invoices_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_Log {
+  Id             Int      @id(map: "PK_Tracker_Log") @default(autoincrement())
+  Username       String   @db.VarChar(255)
+  IpAddress      String   @db.VarChar(255)
+  Timestamp      DateTime @default(now(), map: "DF_Tracker_Log_Timestamp") @db.DateTime
+  UserAgent      String?  @db.VarChar(555)
+  BrowserType    String?  @db.VarChar(255)
+  BrowserVersion String?  @db.VarChar(255)
+  IncomingUrl    String?  @db.VarChar(500)
+  LoginStatus    String?  @db.VarChar(255)
+
+  @@schema("dbo")
+}
+
+model Tracker_Mobile_Backups {
+  Id                 Int      @id(map: "PK_Tracker_Mobile_Backups") @default(autoincrement())
+  Filename           String?  @db.NVarChar(Max)
+  AzureBlobReference String?  @db.VarChar(255)
+  Active             Boolean  @default(true, map: "DF_Tracker_Mobile_Backups_Active")
+  Timestamp          DateTime @default(now(), map: "DF_Tracker_Mobile_Backups_Timestamp") @db.DateTime
+  MobileUserId       String?  @db.UniqueIdentifier
+
+  @@schema("dbo")
+}
+
+model Tracker_Notifications {
+  Id                                                                   Int           @id(map: "PK_Tracker_Notifications") @default(autoincrement())
+  AllocatedToUserId                                                    Int
+  LoggedByUserId                                                       Int
+  RelatedItemId                                                        Int?
+  Type                                                                 Int
+  ReadTime                                                             DateTime?     @db.DateTime
+  Timestamp                                                            DateTime      @default(now(), map: "DF_Tracker_Notifications_Timestamp") @db.DateTime
+  Tracker_Users_Tracker_Notifications_AllocatedToUserIdToTracker_Users Tracker_Users @relation("Tracker_Notifications_AllocatedToUserIdToTracker_Users", fields: [AllocatedToUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Notifications_AllocatedToUserId_Tracker_Users")
+  Tracker_Users_Tracker_Notifications_LoggedByUserIdToTracker_Users    Tracker_Users @relation("Tracker_Notifications_LoggedByUserIdToTracker_Users", fields: [LoggedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Notifications_LoggedByUserId_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_Products {
+  Id                              Int                               @id(map: "PK_Tracker_ProductName") @default(autoincrement())
+  ProductName                     String                            @db.VarChar(Max)
+  Active                          Boolean                           @default(true, map: "DF_Tracker_Products_Active")
+  Timestamp                       DateTime                          @default(now(), map: "DF_Tracker_Products_Timestamp") @db.DateTime
+  Tracker_Task_Domain_Assignments Tracker_Task_Domain_Assignments[]
+  Tracker_Tasks                   Tracker_Tasks[]
+
+  @@schema("dbo")
+}
+
+model Tracker_Tags {
+  Id                       Int                       @id(map: "PK_Tracker_Tags") @default(autoincrement())
+  Description              String                    @db.NVarChar(200)
+  DepartmentId             Int?
+  Colour                   String                    @default("blue", map: "DF_Tracker_Tags_Color") @db.NVarChar(200)
+  TypeId                   Int
+  Timestamp                DateTime                  @default(now(), map: "DF_Tracker_Tags_Timestamp") @db.DateTime
+  CreatedByUserId          Int
+  DeletedbyUserId          Int?
+  DeletionDate             DateTime?                 @db.DateTime
+  Active                   Boolean                   @default(true, map: "DF_Tracker_Tags_Active")
+  Tracker_User_Departments Tracker_User_Departments? @relation(fields: [DepartmentId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Tags_Tracker_User_Departments")
+  Tracker_Users            Tracker_Users             @relation(fields: [CreatedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Tags_Tracker_Users")
+  Tracker_Task_Tags        Tracker_Task_Tags[]
+
+  @@schema("dbo")
+}
+
+model Tracker_Task_Attachments {
+  Id                 Int           @id(map: "PK_Tracker_Task_Attachments") @default(autoincrement())
+  TaskId             Int
+  Filepath           String?       @db.NVarChar(Max)
+  Active             Boolean       @default(true, map: "DF_Tracker_Task_Attachments_Active")
+  Timestamp          DateTime      @default(now(), map: "DF_Tracker_Task_Attachments_Timestamp") @db.DateTime
+  Filename           String?       @db.NVarChar(Max)
+  UniqueFilename     String?       @db.NVarChar(Max)
+  AzureBlobReference String?       @db.VarChar(255)
+  Tracker_Tasks      Tracker_Tasks @relation(fields: [TaskId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_Attachments_Tasks")
+
+  @@schema("dbo")
+}
+
+model Tracker_Task_Audit {
+  Id            Int           @id(map: "PK_Tracker_Task_Audit") @default(autoincrement())
+  TaskId        Int
+  UserId        Int
+  FieldName     String        @db.VarChar(Max)
+  FieldValue    String?       @db.VarChar(Max)
+  Timestamp     DateTime      @default(now(), map: "DF_Tracker_Task_Audit_Timestamp") @db.DateTime
+  Tracker_Users Tracker_Users @relation(fields: [UserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_Audit_Task_Audit")
+  Tracker_Tasks Tracker_Tasks @relation(fields: [TaskId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_Audit_Tasks")
+
+  @@schema("dbo")
+}
+
+model Tracker_Task_Domain_Assignments {
+  Id                   Int                  @id(map: "PK_Tracker_Task_Domain_Assignments") @default(autoincrement())
+  DomainId             Int
+  ProductId            Int?
+  CallTypeId           Int?
+  Active               Boolean              @default(true, map: "DF_Tracker_Task_Domain_Assignments_Active")
+  Timestamp            DateTime             @default(now(), map: "DF_Tracker_Task_Domain_Assignments_Timestamp") @db.DateTime
+  Tracker_CallTypes    Tracker_CallTypes?   @relation(fields: [CallTypeId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Task_Domain_Assignments_Tracker_CallTypes")
+  Tracker_Products     Tracker_Products?    @relation(fields: [ProductId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Task_Domain_Assignments_Tracker_Products")
+  Tracker_Task_Domains Tracker_Task_Domains @relation(fields: [DomainId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_Domain_Assignments_Tracker_Task_Domains")
+
+  @@schema("dbo")
+}
+
+model Tracker_Task_Domains {
+  Id                              Int                               @id(map: "PK_Tracker_Task_Domains") @default(autoincrement())
+  Description                     String                            @db.VarChar(64)
+  Active                          Boolean                           @default(true, map: "DF_Tracker_Task_Domains_Active")
+  Timestamp                       DateTime                          @default(now(), map: "DF_Tracker_Task_Domains_Timestamp") @db.DateTime
+  Tracker_Task_Domain_Assignments Tracker_Task_Domain_Assignments[]
+
+  @@schema("dbo")
+}
+
+model Tracker_Task_EmailSent {
+  Id            Int           @id(map: "PK_Tracker_Task_EmailSent") @default(autoincrement())
+  TaskId        Int
+  EmailTo       String        @db.NVarChar(200)
+  AuthorUserId  Int
+  Timestamp     DateTime      @default(now(), map: "DF_Tracker_Task_EmailSent_Timestamp") @db.DateTime
+  Tracker_Tasks Tracker_Tasks @relation(fields: [TaskId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_EmailSent")
+  Tracker_Users Tracker_Users @relation(fields: [AuthorUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_EmailSent_AuthorUserId")
+
+  @@schema("dbo")
+}
+
+model Tracker_Task_IntercomLinks {
+  Id                                                                      Int            @id(map: "PK_Tracker_Task_IntercomLinks") @default(autoincrement())
+  TaskId                                                                  Int
+  Link                                                                    String         @db.NVarChar(200)
+  AuthorUserId                                                            Int
+  DeletedbyUserId                                                         Int?
+  DeletionDate                                                            DateTime?      @db.DateTime
+  Active                                                                  Boolean        @default(true, map: "DF_Tracker_Task_IntercomLinks_Active")
+  Timestamp                                                               DateTime       @default(now(), map: "DF_Tracker_Task_IntercomLinks_Timestamp") @db.DateTime
+  Tracker_Users_Tracker_Task_IntercomLinks_AuthorUserIdToTracker_Users    Tracker_Users  @relation("Tracker_Task_IntercomLinks_AuthorUserIdToTracker_Users", fields: [AuthorUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_IntercomLinks_AuthorUserId")
+  Tracker_Users_Tracker_Task_IntercomLinks_DeletedbyUserIdToTracker_Users Tracker_Users? @relation("Tracker_Task_IntercomLinks_DeletedbyUserIdToTracker_Users", fields: [DeletedbyUserId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Task_IntercomLinks_DeletedbyUserId")
+  Tracker_Tasks                                                           Tracker_Tasks  @relation(fields: [TaskId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_IntercomLinks_Tasks")
+
+  @@schema("dbo")
+}
+
+model Tracker_Task_JiraLinks {
+  Id                                                                  Int            @id(map: "PK_Tracker_Task_JiraLinks") @default(autoincrement())
+  TaskId                                                              Int
+  Link                                                                String         @db.NVarChar(200)
+  AuthorUserId                                                        Int
+  DeletedbyUserId                                                     Int?
+  DeletionDate                                                        DateTime?      @db.DateTime
+  Active                                                              Boolean        @default(true, map: "DF_Tracker_Task_JiraLinks_Active")
+  Timestamp                                                           DateTime       @default(now(), map: "DF_Tracker_Task_JiraLinks_Timestamp") @db.DateTime
+  Tracker_Users_Tracker_Task_JiraLinks_AuthorUserIdToTracker_Users    Tracker_Users  @relation("Tracker_Task_JiraLinks_AuthorUserIdToTracker_Users", fields: [AuthorUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_JiraLinks_AuthorUserId")
+  Tracker_Users_Tracker_Task_JiraLinks_DeletedbyUserIdToTracker_Users Tracker_Users? @relation("Tracker_Task_JiraLinks_DeletedbyUserIdToTracker_Users", fields: [DeletedbyUserId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Task_JiraLinks_DeletedbyUserId")
+  Tracker_Tasks                                                       Tracker_Tasks  @relation(fields: [TaskId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_JiraLinks_Tracker_Tasks")
+
+  @@schema("dbo")
+}
+
+model Tracker_Task_Notes {
+  Id                                                              Int                          @id(map: "PK_Tracker_Task_Notes") @default(autoincrement())
+  TaskId                                                          Int
+  Note                                                            String                       @db.VarChar(Max)
+  AuthorUserId                                                    Int
+  DeletedbyUserId                                                 Int?
+  DeletionDate                                                    DateTime?                    @db.DateTime
+  Active                                                          Boolean                      @default(true, map: "DF_Tracker_Task_Notes_Active")
+  Timestamp                                                       DateTime                     @default(now(), map: "DF_Tracker_Task_Notes_Timestamp") @db.DateTime
+  StatusId                                                        Int
+  Tracker_Users_Tracker_Task_Notes_AuthorUserIdToTracker_Users    Tracker_Users                @relation("Tracker_Task_Notes_AuthorUserIdToTracker_Users", fields: [AuthorUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_Notes_AuthorUserId")
+  Tracker_Users_Tracker_Task_Notes_DeletedbyUserIdToTracker_Users Tracker_Users?               @relation("Tracker_Task_Notes_DeletedbyUserIdToTracker_Users", fields: [DeletedbyUserId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Task_Notes_DeletedbyUserId")
+  Tracker_Task_Statuses                                           Tracker_Task_Statuses        @relation("Tracker_Task_Notes_Status", fields: [StatusId], references: [Id])
+  Tracker_Tasks                                                   Tracker_Tasks                @relation(fields: [TaskId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_Notes_Tasks")
+  Tracker_User_Time_Tracking                                      Tracker_User_Time_Tracking[]
+
+  @@index([StatusId, Timestamp], map: "nci_wi_Tracker_Task_Notes_549B1C40FA6161750C4E65B8E90B3596")
+  @@index([TaskId, Active], map: "nci_wi_Tracker_Task_Notes_F8DAC59DA45A30ADB0ED8B450556C255")
+  @@schema("dbo")
+}
+
+model Tracker_Task_Owner_Change_Audit {
+  Id                                                                             Int            @id(map: "PK_Tracker_Task_Owner_Change_Audit") @default(autoincrement())
+  TaskId                                                                         Int
+  ChangedByUserId                                                                Int?
+  ChangedFromUserId                                                              Int?
+  ChangedToUserId                                                                Int?
+  Timestamp                                                                      DateTime       @default(now(), map: "DF_Tracker_Task_Owner_Change_Audit_Timestamp") @db.DateTime
+  LegacyEventId                                                                  Int?
+  Tracker_Users_Tracker_Task_Owner_Change_Audit_ChangedByUserIdToTracker_Users   Tracker_Users? @relation("Tracker_Task_Owner_Change_Audit_ChangedByUserIdToTracker_Users", fields: [ChangedByUserId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Task_Owner_Change_Audit_ChangedByUserId_Tracker_Users")
+  Tracker_Users_Tracker_Task_Owner_Change_Audit_ChangedFromUserIdToTracker_Users Tracker_Users? @relation("Tracker_Task_Owner_Change_Audit_ChangedFromUserIdToTracker_Users", fields: [ChangedFromUserId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Task_Owner_Change_Audit_ChangedFromUserId_Tracker_Users")
+  Tracker_Users_Tracker_Task_Owner_Change_Audit_ChangedToUserIdToTracker_Users   Tracker_Users? @relation("Tracker_Task_Owner_Change_Audit_ChangedToUserIdToTracker_Users", fields: [ChangedToUserId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Task_Owner_Change_Audit_ChangedToUserId_Tracker_Users")
+  Tracker_Tasks                                                                  Tracker_Tasks  @relation(fields: [TaskId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_Owner_Change_Audit_TaskId_Tracker_Tasks")
+
+  @@schema("dbo")
+}
+
+model Tracker_Task_Priorities {
+  Id            Int             @id(map: "PK_Tracker_Task_Priorities") @default(autoincrement())
+  Description   String          @db.VarChar(255)
+  Active        Boolean         @default(true, map: "DF_Tracker_Task_Priorities_Active")
+  Timestamp     DateTime        @default(now(), map: "DF_Tracker_Task_Priorities_Timestamp") @db.DateTime
+  Tracker_Tasks Tracker_Tasks[]
+
+  @@schema("dbo")
+}
+
+model Tracker_Task_Source_Change_Audit {
+  Id                                                                                              Int                   @id(map: "PK_Tracker_Task_Source_Change_Audit") @default(autoincrement())
+  TaskId                                                                                          Int
+  ChangedByUserId                                                                                 Int?
+  ChangedFromSourceId                                                                             Int?
+  ChangedToSourceId                                                                               Int?
+  Timestamp                                                                                       DateTime              @default(now(), map: "DF_Tracker_Task_Source_Change_Audit_Timestamp") @db.DateTime
+  Tracker_Users                                                                                   Tracker_Users?        @relation(fields: [ChangedByUserId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Task_Source_Change_Audit_ChangedByUserId_Tracker_Users")
+  Tracker_Task_Sources_Tracker_Task_Source_Change_Audit_ChangedFromSourceIdToTracker_Task_Sources Tracker_Task_Sources? @relation("Tracker_Task_Source_Change_Audit_ChangedFromSourceIdToTracker_Task_Sources", fields: [ChangedFromSourceId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Task_Source_Change_Audit_ChangedFromSourceId_Tracker_Task_Sources")
+  Tracker_Task_Sources_Tracker_Task_Source_Change_Audit_ChangedToSourceIdToTracker_Task_Sources   Tracker_Task_Sources? @relation("Tracker_Task_Source_Change_Audit_ChangedToSourceIdToTracker_Task_Sources", fields: [ChangedToSourceId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Task_Source_Change_Audit_ChangedToSourceId_Tracker_Task_Sources")
+  Tracker_Tasks                                                                                   Tracker_Tasks         @relation(fields: [TaskId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_Source_Change_Audit_TaskId_Tracker_Tasks")
+
+  @@schema("dbo")
+}
+
+model Tracker_Task_Sources {
+  Id                                                                                                          Int                                @id(map: "PK_Tracker_Task_Sources") @default(autoincrement())
+  Description                                                                                                 String                             @db.NVarChar(Max)
+  Active                                                                                                      Boolean                            @default(true, map: "DF_Tracker_Task_Sources_Active")
+  Timestamp                                                                                                   DateTime                           @default(now(), map: "DF_Tracker_Task_Sources_Timestamp") @db.DateTime
+  Tracker_Task_Source_Change_Audit_Tracker_Task_Source_Change_Audit_ChangedFromSourceIdToTracker_Task_Sources Tracker_Task_Source_Change_Audit[] @relation("Tracker_Task_Source_Change_Audit_ChangedFromSourceIdToTracker_Task_Sources")
+  Tracker_Task_Source_Change_Audit_Tracker_Task_Source_Change_Audit_ChangedToSourceIdToTracker_Task_Sources   Tracker_Task_Source_Change_Audit[] @relation("Tracker_Task_Source_Change_Audit_ChangedToSourceIdToTracker_Task_Sources")
+  Tracker_Tasks                                                                                               Tracker_Tasks[]
+
+  @@schema("dbo")
+}
+
+model Tracker_Task_Statuses {
+  Id                 Int                  @id(map: "PK_Tracker_Task_Statuses") @default(autoincrement())
+  Description        String               @db.VarChar(200)
+  IsOpen             Boolean              @default(true, map: "DF_Tracker_Task_Statuses_IsOpen")
+  Active             Boolean              @default(true, map: "DF_Tracker_Task_Statuses_Active")
+  Timestamp          DateTime             @default(now(), map: "DF_Tracker_Task_Statuses_Timestamp") @db.DateTime
+  Tracker_Tasks      Tracker_Tasks[]
+  Tracker_Task_Notes Tracker_Task_Notes[] @relation("Tracker_Task_Notes_Status")
+
+  @@schema("dbo")
+}
+
+model Tracker_Task_Tags {
+  Id                                                             Int            @id(map: "PK_Tracker_Task_Tags") @default(autoincrement())
+  TaskId                                                         Int
+  TagId                                                          Int
+  Timestamp                                                      DateTime       @default(now(), map: "DF_Tracker_Task_Tags_Timestamp") @db.DateTime
+  AddedByUserId                                                  Int
+  DeletedbyUserId                                                Int?
+  DeletionDate                                                   DateTime?      @db.DateTime
+  Active                                                         Boolean        @default(true, map: "DF_Tracker_Task_Tags_Active")
+  Tracker_Tags                                                   Tracker_Tags   @relation(fields: [TagId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_Tags_Tracker_Tags")
+  Tracker_Tasks                                                  Tracker_Tasks  @relation(fields: [TaskId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_Tags_Tracker_Tasks")
+  Tracker_Users_Tracker_Task_Tags_AddedByUserIdToTracker_Users   Tracker_Users  @relation("Tracker_Task_Tags_AddedByUserIdToTracker_Users", fields: [AddedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Task_Tags_Tracker_Users_AddedByUserId")
+  Tracker_Users_Tracker_Task_Tags_DeletedbyUserIdToTracker_Users Tracker_Users? @relation("Tracker_Task_Tags_DeletedbyUserIdToTracker_Users", fields: [DeletedbyUserId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Task_Tags_Tracker_Users_DeletedbyUserId")
+
+  @@schema("dbo")
+}
+
+model Tracker_Tasks {
+  Id                                                           Int                                @id(map: "PK_Tracker_Tasks") @default(autoincrement())
+  ClientId                                                     Int
+  LoggedByUserId                                               Int
+  AllocatedToUserId                                            Int
+  Subject                                                      String                             @db.VarChar(Max)
+  StatusId                                                     Int
+  PriorityId                                                   Int
+  ReportedBy                                                   Int
+  ClientProductId                                              Int?
+  Active                                                       Boolean                            @default(true, map: "DF_Tracker_Tasks_Active")
+  Timestamp                                                    DateTime                           @default(now(), map: "DF_Tracker_Tasks_Timestamp") @db.DateTime
+  OriginalTaskId                                               Int?
+  CallTypeId                                                   Int?
+  SourceId                                                     Int                                @default(1, map: "DF_Tracker_Tasks_SourceId")
+  TaskUpdated                                                  Boolean                            @default(false, map: "DF_Tracker_Tasks_TaskUpdated")
+  ProductId                                                    Int?
+  RelatedTicketLink                                            String?                            @db.VarChar(1000)
+  DomainId                                                     Int?
+  SubCategory                                                  String?                            @db.VarChar(1000)
+  Title                                                        String?                            @db.VarChar(150)
+  NumberCalledFrom                                             String?                            @db.VarChar(20)
+  Tracker_Task_Attachments                                     Tracker_Task_Attachments[]
+  Tracker_Task_Audit                                           Tracker_Task_Audit[]
+  Tracker_Task_EmailSent                                       Tracker_Task_EmailSent[]
+  Tracker_Task_IntercomLinks                                   Tracker_Task_IntercomLinks[]
+  Tracker_Task_JiraLinks                                       Tracker_Task_JiraLinks[]
+  Tracker_Task_Notes                                           Tracker_Task_Notes[]
+  Tracker_Task_Owner_Change_Audit                              Tracker_Task_Owner_Change_Audit[]
+  Tracker_Task_Source_Change_Audit                             Tracker_Task_Source_Change_Audit[]
+  Tracker_Task_Tags                                            Tracker_Task_Tags[]
+  Tracker_Users_Tracker_Tasks_AllocatedToUserIdToTracker_Users Tracker_Users                      @relation("Tracker_Tasks_AllocatedToUserIdToTracker_Users", fields: [AllocatedToUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Tasks_Allocateduser")
+  Tracker_CallTypes                                            Tracker_CallTypes?                 @relation(fields: [CallTypeId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Tasks_Call_Type")
+  Tracker_Client_Products                                      Tracker_Client_Products?           @relation(fields: [ClientProductId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Tasks_ClientProduct_ID")
+  Tracker_Users_Tracker_Tasks_LoggedByUserIdToTracker_Users    Tracker_Users                      @relation("Tracker_Tasks_LoggedByUserIdToTracker_Users", fields: [LoggedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Tasks_LoggedUser")
+  Tracker_Task_Priorities                                      Tracker_Task_Priorities            @relation(fields: [PriorityId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Tasks_ProirityId")
+  Tracker_Task_Sources                                         Tracker_Task_Sources               @relation(fields: [SourceId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Tasks_Sources")
+  Tracker_Task_Statuses                                        Tracker_Task_Statuses              @relation(fields: [StatusId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Tasks_StatusId")
+  Tracker_Products                                             Tracker_Products?                  @relation(fields: [ProductId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Tasks_Tracker_Tasks")
+  Tracker_Tasks_Watchlist                                      Tracker_Tasks_Watchlist[]
+  Tracker_User_Time_Tracking                                   Tracker_User_Time_Tracking[]
+  Company                                                      Company?                           @relation(fields: [ClientId], references: [Id])
+
+  @@index([AllocatedToUserId, StatusId, Timestamp], map: "nci_wi_Tracker_Tasks_4FA582BDA7552EAD887EF76720B8BFB7")
+  @@index([Active, AllocatedToUserId], map: "nci_wi_Tracker_Tasks_69FE45969946EA0C42F83F13F065E8E3")
+  @@index([StatusId, Active], map: "nci_wi_Tracker_Tasks_86381C886F6201AB0BAF330F374FA348")
+  @@index([ClientId], map: "nci_wi_Tracker_Tasks_E00971AA8A4A66F2C66B23E02008536F")
+  @@index([LoggedByUserId, Timestamp], map: "nci_wi_Tracker_Tasks_EA4F7DBFD95C68864FE6F49C3344E1FA")
+  @@schema("dbo")
+}
+
+model Tracker_Tasks_Watchlist {
+  ID            Int           @id(map: "PK_Tracker_Tasks_Watchlist") @default(autoincrement())
+  TaskID        Int
+  UserID        Int
+  TimeStamp     DateTime      @default(now(), map: "DF__Tracker_T__TimeS__1E5A75C5") @db.DateTime
+  Tracker_Tasks Tracker_Tasks @relation(fields: [TaskID], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Tasks_Watchlist_TaskID_Tracker_Tasks")
+  Tracker_Users Tracker_Users @relation(fields: [UserID], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Tasks_Watchlist_UserID_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_TimeTracking {
+  Id                         Int                        @id(map: "PK_Tracker_TimeTracking") @default(autoincrement())
+  UserId                     Int
+  TimeTrackingTypeId         Int
+  Timestamp                  DateTime                   @default(now(), map: "DF__Tracker_T__Times__1F4E99FE") @db.DateTime
+  Tracker_TimeTracking_Types Tracker_TimeTracking_Types @relation(fields: [TimeTrackingTypeId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_TimeTracking_Tracker_TimeTracking_Types")
+  Tracker_Users              Tracker_Users              @relation(fields: [UserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_TimeTracking_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_TimeTracking_Types {
+  Id                   Int                    @id(map: "PK_Tracker_TimeTracking_Types")
+  Description          String                 @db.VarChar(64)
+  Timestamp            DateTime               @default(now(), map: "DF__Tracker_T__Times__2042BE37") @db.DateTime
+  Tracker_TimeTracking Tracker_TimeTracking[]
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Annual_Leave {
+  Id                                                                     Int           @id(map: "PK_Tracker_User_Annual_Leave") @default(autoincrement())
+  UserId                                                                 Int
+  OnLeaveTill                                                            DateTime?     @db.Date
+  AmendedByUserId                                                        Int
+  Active                                                                 Boolean
+  Timestamp                                                              DateTime      @default(now(), map: "DF_Tracker_User_Annual_Leave_Timestamp") @db.DateTime
+  Tracker_Users_Tracker_User_Annual_Leave_AmendedByUserIdToTracker_Users Tracker_Users @relation("Tracker_User_Annual_Leave_AmendedByUserIdToTracker_Users", fields: [AmendedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Annual_Leave_AmendedByUserId_Tracker_Users")
+  Tracker_Users_Tracker_User_Annual_Leave_UserIdToTracker_Users          Tracker_Users @relation("Tracker_User_Annual_Leave_UserIdToTracker_Users", fields: [UserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Annual_Leave_UserId_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Departments {
+  Id                                   Int                                    @id(map: "PK_Tracker_User_Departments") @default(autoincrement())
+  Name                                 String                                 @db.VarChar(1000)
+  Active                               Boolean                                @default(true, map: "DF_Tracker_User_Departments_Active")
+  Timestamp                            DateTime                               @default(now(), map: "DF_Tracker_User_Departments_Timestamp") @db.DateTime
+  Color                                String?                                @db.NVarChar(Max)
+  Tracker_Client_CustomerJourneyStages Tracker_Client_CustomerJourneyStages[]
+  Tracker_Tags                         Tracker_Tags[]
+  Tracker_Users                        Tracker_Users[]
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Details_Audit {
+  Id                                                                      Int           @id(map: "PK_Tracker_User_Details_Audit") @default(autoincrement())
+  AmendedUserId                                                           Int
+  AmendedByUserId                                                         Int
+  FieldId                                                                 Int
+  ChangedTo                                                               String?       @db.NVarChar(200)
+  ChangedFrom                                                             String?       @db.NVarChar(200)
+  Timestamp                                                               DateTime?     @default(now(), map: "DF_Tracker_User_Details_Audit_Timestamp") @db.DateTime
+  Tracker_Users_Tracker_User_Details_Audit_AmendedByUserIdToTracker_Users Tracker_Users @relation("Tracker_User_Details_Audit_AmendedByUserIdToTracker_Users", fields: [AmendedByUserId], references: [Id], onUpdate: NoAction, map: "Tracker_User_Details_Audit_AmendedByUserId_Tracker_Users")
+  Tracker_Users_Tracker_User_Details_Audit_AmendedUserIdToTracker_Users   Tracker_Users @relation("Tracker_User_Details_Audit_AmendedUserIdToTracker_Users", fields: [AmendedUserId], references: [Id], onUpdate: NoAction, map: "Tracker_User_Details_Audit_AmendedUserId_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Permission_Audit {
+  Id                                                                         Int           @id(map: "PK_Tracker_User_Permission_Audit") @default(autoincrement())
+  AmendedByUserId                                                            Int
+  AmendedUserId                                                              Int
+  PermissionId                                                               Int
+  Enabled                                                                    Boolean
+  Timestamp                                                                  DateTime      @default(now(), map: "DF_Tracker_User_Permission_Audit_Timestamp") @db.DateTime
+  ChangeType                                                                 Int           @default(1, map: "DF_Tracker_User_Permission_Audit_ChangeType")
+  Tracker_Users_Tracker_User_Permission_Audit_AmendedByUserIdToTracker_Users Tracker_Users @relation("Tracker_User_Permission_Audit_AmendedByUserIdToTracker_Users", fields: [AmendedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Permission_Audit_AmendedByUserId_Tracker_Users")
+  Tracker_Users_Tracker_User_Permission_Audit_AmendedUserIdToTracker_Users   Tracker_Users @relation("Tracker_User_Permission_Audit_AmendedUserIdToTracker_Users", fields: [AmendedUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Permission_Audit_AmendedUserId_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Permissions {
+  Id            Int           @id(map: "PK_Tracker_User_Permission_Assignments") @default(autoincrement())
+  UserId        Int
+  PermissionId  Int
+  Active        Boolean       @default(true, map: "DF__Tracker_U__Activ__25FB978D")
+  Timestamp     DateTime      @default(now(), map: "DF_Tracker_User_Permission_Assignments_Timestamp") @db.DateTime
+  OverwriteRole Boolean       @default(false, map: "DF_Tracker_User_Permission_Assignments_OverwriteRole")
+  Tracker_Users Tracker_Users @relation(fields: [UserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Permission_Assignments_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Preference_Audit {
+  Id                                                                         Int           @id(map: "PK_Tracker_User_Preference_Audit") @default(autoincrement())
+  AmendedByUserId                                                            Int
+  AmendedUserId                                                              Int
+  OldPreferenceId                                                            Int?
+  NewPreferenceId                                                            Int?
+  Timestamp                                                                  DateTime      @default(now(), map: "DF_Tracker_User_Preference_Audit_Timestamp") @db.DateTime
+  PreferenceType                                                             Int           @default(1, map: "DF_Tracker_User_Preference_Audit_PreferenceType")
+  Tracker_Users_Tracker_User_Preference_Audit_AmendedUserIdToTracker_Users   Tracker_Users @relation("Tracker_User_Preference_Audit_AmendedUserIdToTracker_Users", fields: [AmendedUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Preference_AmendedUserId_Tracker_Users")
+  Tracker_Users_Tracker_User_Preference_Audit_AmendedByUserIdToTracker_Users Tracker_Users @relation("Tracker_User_Preference_Audit_AmendedByUserIdToTracker_Users", fields: [AmendedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Preference_Audit_AmendedByUserId_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Preferences {
+  Id             Int           @id(map: "PK_Tracker_User_Preference") @default(autoincrement())
+  UserId         Int
+  PreferenceId   Int
+  Active         Boolean       @default(true, map: "DF__tmp_ms_xx__Activ__7B9B496D")
+  Timestamp      DateTime      @default(now(), map: "DF_Tracker_User_Preference_Assignments_Timestamp") @db.DateTime
+  OverwriteRole  Boolean       @default(false, map: "DF_Tracker_User_Preference_Assignments_OverwriteRole")
+  PreferenceType Int           @default(1, map: "DF_Tracker_User_Preference_PreferenceType")
+  Tracker_Users  Tracker_Users @relation(fields: [UserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Preference_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Role_Permission_Audit {
+  Id                 Int                @id(map: "PK_Tracker_User_Role_Permission_Audit") @default(autoincrement())
+  AmendedByUserId    Int
+  AmendedRoleId      Int
+  PermissionId       Int
+  Enabled            Boolean
+  Timestamp          DateTime           @default(now(), map: "DF_Tracker_User_Role_Permission_Audit_Timestamp") @db.DateTime
+  Tracker_Users      Tracker_Users      @relation(fields: [AmendedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Role_Permission_Audit_AmendedByUserId_Tracker_Users")
+  Tracker_User_Roles Tracker_User_Roles @relation(fields: [AmendedRoleId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Role_Permission_Audit_AmendedRoleId_Tracker_User_Roles")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Role_Permissions {
+  Id                 Int                @id(map: "PK_Tracker_User_Role_Permissions") @default(autoincrement())
+  RoleId             Int
+  PermissionId       Int
+  Active             Boolean            @default(true, map: "DF_Tracker_User_Role_Permissions_Active")
+  Timestamp          DateTime           @default(now(), map: "DF_Tracker_User_Role_Permissions_Timestamp") @db.DateTime
+  Tracker_User_Roles Tracker_User_Roles @relation(fields: [RoleId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Role_Permissions_Tracker_User_Roles")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Role_Preference_Audit {
+  Id                 Int                @id(map: "PK_Tracker_User_Role_Preference_Audit") @default(autoincrement())
+  AmendedByUserId    Int
+  AmendedRoleId      Int
+  OldPreferenceId    Int?
+  NewPreferenceId    Int?
+  Timestamp          DateTime           @default(now(), map: "DF_Tracker_User_Role_Preference_Audit_Timestamp") @db.DateTime
+  PreferenceType     Int                @default(1, map: "DF_Tracker_User_Role_Preference_Audit_PreferenceType")
+  Tracker_Users      Tracker_Users      @relation(fields: [AmendedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Role_Preference_Audit_AmendedByUserId_Tracker_Users")
+  Tracker_User_Roles Tracker_User_Roles @relation(fields: [AmendedRoleId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Role_Preference_Audit_AmendedRoleId_Tracker_User_Roles")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Role_Preferences {
+  Id                 Int                @id(map: "PK_Tracker_User_Role_Preferences") @default(autoincrement())
+  RoleId             Int
+  PreferenceId       Int
+  Active             Boolean            @default(true, map: "Tracker_User_Role_Preferences_Active")
+  CreatedAt          DateTime           @default(now(), map: "Tracker_User_Role_Preferences_CreatedAt") @db.DateTime
+  UpdatedAt          DateTime?          @db.DateTime
+  PreferenceType     Int                @default(1, map: "Tracker_User_Role_Preferences_PreferenceType")
+  Tracker_User_Roles Tracker_User_Roles @relation(fields: [RoleId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Role_Preferences_Tracker_User_Roles")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Role_Settings {
+  Id                 Int                @id(map: "PK_Tracker_User_Role_Settings") @default(autoincrement())
+  RoleId             Int
+  SettingId          Int
+  Active             Boolean            @default(true, map: "DF_Tracker_User_Role_Settings_Active")
+  Timestamp          DateTime           @default(now(), map: "DF_Tracker_User_Role_Settings_Timestamp") @db.DateTime
+  Tracker_User_Roles Tracker_User_Roles @relation(fields: [RoleId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Role_Settings_Tracker_User_Roles")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Role_Settings_Audit {
+  Id                 Int                @id(map: "PK_Tracker_User_Role_Settings_Audit") @default(autoincrement())
+  AmendedByUserId    Int
+  AmendedRoleId      Int
+  SettingId          Int
+  Enabled            Boolean
+  Timestamp          DateTime           @default(now(), map: "DF_Tracker_User_Role_Settings_Audit_Timestamp") @db.DateTime
+  Tracker_Users      Tracker_Users      @relation(fields: [AmendedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Role_Settings_Audit_AmendedByUserId_Tracker_Users")
+  Tracker_User_Roles Tracker_User_Roles @relation(fields: [AmendedRoleId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Role_Settings_Audit_AmendedRoleId_Tracker_User_Roles")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Roles {
+  Id                                                              Int                                  @id(map: "PK_Tracker_User_Roles") @default(autoincrement())
+  Description                                                     String                               @db.NVarChar(200)
+  Active                                                          Boolean                              @default(true, map: "DF_Tracker_User_Roles_Active")
+  Timestamp                                                       DateTime                             @default(now(), map: "DF_Tracker_User_Roles_Timestamp") @db.DateTime
+  CreatedByUserId                                                 Int?
+  Tracker_User_Role_Permission_Audit                              Tracker_User_Role_Permission_Audit[]
+  Tracker_User_Role_Permissions                                   Tracker_User_Role_Permissions[]
+  Tracker_User_Role_Preference_Audit                              Tracker_User_Role_Preference_Audit[]
+  Tracker_User_Role_Preferences                                   Tracker_User_Role_Preferences[]
+  Tracker_User_Role_Settings                                      Tracker_User_Role_Settings[]
+  Tracker_User_Role_Settings_Audit                                Tracker_User_Role_Settings_Audit[]
+  Tracker_Users_Tracker_User_Roles_CreatedByUserIdToTracker_Users Tracker_Users?                       @relation("Tracker_User_Roles_CreatedByUserIdToTracker_Users", fields: [CreatedByUserId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_User_Roles_Tracker_User")
+  Tracker_Users_Tracker_Users_RoleIdToTracker_User_Roles          Tracker_Users[]                      @relation("Tracker_Users_RoleIdToTracker_User_Roles")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Setting_Audit {
+  Id                                                                      Int           @id(map: "PK_Tracker_User_Setting_Audit") @default(autoincrement())
+  AmendedByUserId                                                         Int
+  AmendedUserId                                                           Int
+  SettingId                                                               Int
+  Enabled                                                                 Boolean
+  Timestamp                                                               DateTime      @default(now(), map: "DF_Tracker_User_Setting_Audit_Timestamp") @db.DateTime
+  ChangeType                                                              Int           @default(1, map: "DF_Tracker_User_Setting_Audit_ChangeType")
+  Tracker_Users_Tracker_User_Setting_Audit_AmendedByUserIdToTracker_Users Tracker_Users @relation("Tracker_User_Setting_Audit_AmendedByUserIdToTracker_Users", fields: [AmendedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Setting_Audit_AmendedByUserId_Tracker_Users")
+  Tracker_Users_Tracker_User_Setting_Audit_AmendedUserIdToTracker_Users   Tracker_Users @relation("Tracker_User_Setting_Audit_AmendedUserIdToTracker_Users", fields: [AmendedUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Setting_Audit_AmendedUserId_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Settings {
+  Id            Int           @id(map: "PK_Tracker_User_Setting_Assignments") @default(autoincrement())
+  UserId        Int
+  SettingId     Int
+  Active        Boolean       @default(true, map: "DF__Tracker_U__Activ__42B7D1CC")
+  Timestamp     DateTime      @default(now(), map: "DF_Tracker_User_Setting_Assignments_Timestamp") @db.DateTime
+  OverwriteRole Boolean       @default(false, map: "DF_Tracker_User_Setting_Assignments_OverwriteRole")
+  Tracker_Users Tracker_Users @relation(fields: [UserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Setting_Assignments_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Team_Member_Audit {
+  Id                                                                          Int                @id(map: "PK_Tracker_User_Team_Member_Audit") @default(autoincrement())
+  AmendedByUserId                                                             Int
+  UserId                                                                      Int
+  TeamId                                                                      Int
+  IsTeamLead                                                                  Boolean            @default(false, map: "DF__Tracker_U__IsTea__4DD47EBD")
+  Active                                                                      Boolean            @default(true, map: "DF__Tracker_U__Activ__4EC8A2F6")
+  Timestamp                                                                   DateTime           @default(now(), map: "DF_Tracker_User_Team_Member_Audit_Timestamp") @db.DateTime
+  IsNotAMember                                                                Boolean            @default(false, map: "DF_Tracker_User_Team_Member_Audit_IsNotAMember")
+  Tracker_Users_Tracker_User_Team_Member_Audit_AmendedByUserIdToTracker_Users Tracker_Users      @relation("Tracker_User_Team_Member_Audit_AmendedByUserIdToTracker_Users", fields: [AmendedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Team_Member_Audit_AmendedByUserId_Tracker_Users")
+  Tracker_User_Teams                                                          Tracker_User_Teams @relation(fields: [TeamId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Team_Member_Audit_TeamId_Tracker_User_Teams")
+  Tracker_Users_Tracker_User_Team_Member_Audit_UserIdToTracker_Users          Tracker_Users      @relation("Tracker_User_Team_Member_Audit_UserIdToTracker_Users", fields: [UserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Team_Member_Audit_UserId_Tracker_User")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Team_Members {
+  Id                 Int                @id(map: "PK_Tracker_User_Team_Members") @default(autoincrement())
+  UserId             Int
+  TeamId             Int
+  IsTeamLead         Boolean            @default(false, map: "DF__Tracker_U__IsTea__4727812E")
+  Active             Boolean            @default(true, map: "DF__Tracker_U__Activ__481BA567")
+  Timestamp          DateTime           @default(now(), map: "DF_Tracker_User_Team_Members_Timestamp") @db.DateTime
+  IsNotAMember       Boolean            @default(false, map: "DF_Tracker_User_Team_Members_IsNotAMember")
+  Tracker_Users      Tracker_Users      @relation(fields: [UserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Team_Members_Tracker_User")
+  Tracker_User_Teams Tracker_User_Teams @relation(fields: [TeamId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Team_Members_Tracker_User_Teams")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Team_Misc_Audit {
+  Id                 Int                @id(map: "PK_Tracker_User_Team_Misc_Audit") @default(autoincrement())
+  TypeId             Int
+  AmendedByUserId    Int
+  TeamId             Int
+  ChangedFrom        String             @db.NVarChar(200)
+  ChangedTo          String             @db.NVarChar(200)
+  Timestamp          DateTime           @default(now(), map: "DF_Tracker_User_Team_Misc_Audit_Timestamp") @db.DateTime
+  Tracker_Users      Tracker_Users      @relation(fields: [AmendedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Team_Misc_Audit_AmendedByUserId_Tracker_Users")
+  Tracker_User_Teams Tracker_User_Teams @relation(fields: [TeamId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Team_Misc_Audit_TeamId_Tracker_User_Teams")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Team_Misc_Audit_Types {
+  Id          Int      @id(map: "PK_Tracker_User_Team_Misc_Audit_Types") @default(autoincrement())
+  Description String   @db.NVarChar(200)
+  Timestamp   DateTime @default(now(), map: "DF_Tracker_User_Team_Misc_Audit_Types_Timestamp") @db.DateTime
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Teams {
+  Id                                   Int                                    @id(map: "PK_Tracker_User_Teams") @default(autoincrement())
+  Name                                 String                                 @db.NVarChar(200)
+  Active                               Boolean                                @default(true, map: "DF__Tracker_U__Activ__4262CC11")
+  Timestamp                            DateTime                               @default(now(), map: "DF_Tracker_User_Teams_Timestamp") @db.DateTime
+  CreatedByUserId                      Int
+  Colour                               String                                 @default("blue", map: "DF_Tracker_User_Teams_Color") @db.NVarChar(200)
+  Tracker_CustomerJourneyStage_Details Tracker_CustomerJourneyStage_Details[]
+  Tracker_User_Team_Member_Audit       Tracker_User_Team_Member_Audit[]
+  Tracker_User_Team_Members            Tracker_User_Team_Members[]
+  Tracker_User_Team_Misc_Audit         Tracker_User_Team_Misc_Audit[]
+  Tracker_Users                        Tracker_Users                          @relation(fields: [CreatedByUserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Teams_Tracker_User_CreatedByUser")
+
+  @@schema("dbo")
+}
+
+model Tracker_User_Time_Tracking {
+  Id                 Int                 @id(map: "PK_Tracker_User_Time_Tracking") @default(autoincrement())
+  TaskId             Int
+  UserId             Int
+  ActualStartDate    DateTime            @db.DateTime
+  EditedStartDate    DateTime?           @db.DateTime
+  ActualEndDate      DateTime?           @db.DateTime
+  EditedEndDate      DateTime?           @db.DateTime
+  NoteId             Int?
+  Active             Boolean             @default(true, map: "DF_Tracker_User_Time_Tracking_Active")
+  Tracker_Task_Notes Tracker_Task_Notes? @relation(fields: [NoteId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_User_Time_Tracking_Tracker_Task_Notes")
+  Tracker_Tasks      Tracker_Tasks       @relation(fields: [TaskId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Time_Tracking_Tracker_Tasks")
+  Tracker_Users      Tracker_Users       @relation(fields: [UserId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_User_Time_Tracking_Tracker_Users")
+
+  @@schema("dbo")
+}
+
+model Tracker_Users {
+  Id                                                                                               Int                                     @id(map: "PK_Tracker_Users")
+  DepartmentId                                                                                     Int
+  Name                                                                                             String                                  @db.VarChar(1000)
+  Email                                                                                            String                                  @db.VarChar(1000)
+  Password                                                                                         String                                  @db.VarChar(1000)
+  Active                                                                                           Boolean                                 @default(true, map: "DF_Tracker_Users_Active")
+  Timestamp                                                                                        DateTime                                @default(now(), map: "DF_Tracker_Users_Timestamp") @db.DateTime
+  FailedLoginAttempts                                                                              Int                                     @default(0, map: "DF_Tracker_Users_FailedLoginAttempts")
+  Color                                                                                            String                                  @default("blue", map: "DF_Tracker_Users_Color") @db.NVarChar(Max)
+  GuidId                                                                                           String                                  @default(dbgenerated("newid()"), map: "DF_Tracker_Users_GuidId") @db.UniqueIdentifier
+  OwnerId                                                                                          Int?
+  CanLogin                                                                                         Boolean                                 @default(true, map: "DF_Tracker_Users_CanLogin")
+  ActiveCampaignId                                                                                 Int?
+  IsHidden                                                                                         Boolean                                 @default(false, map: "DF__Tracker_U__IsHid__335592AB")
+  TicketsFromDepartmentOnly                                                                        Boolean                                 @default(false, map: "DF_Tracker_Users_TicketsFromDepartmentOnly")
+  RoleId                                                                                           Int?
+  HashedPassword                                                                                   String?                                 @db.VarChar(30)
+  Tracker_Audit                                                                                    Tracker_Audit[]
+  Tracker_Client_AssignedUser_Audit                                                                Tracker_Client_AssignedUser_Audit[]
+  Tracker_Client_Attachments                                                                       Tracker_Client_Attachments[]
+  Tracker_Client_Audit                                                                             Tracker_Client_Audit[]
+  Tracker_Client_Audit_Forms                                                                       Tracker_Client_Audit_Forms[]
+  Tracker_Client_Audit_Payment                                                                     Tracker_Client_Audit_Payment[]
+  Tracker_Client_Group_Audit                                                                       Tracker_Client_Group_Audit[]
+  Tracker_Client_MigrationDetails_Audit                                                            Tracker_Client_MigrationDetails_Audit[]
+  Tracker_Client_Notes_Tracker_Client_Notes_AuthorUserIdToTracker_Users                            Tracker_Client_Notes[]                  @relation("Tracker_Client_Notes_AuthorUserIdToTracker_Users")
+  Tracker_Client_Notes_Tracker_Client_Notes_DeletedbyUserIdToTracker_Users                         Tracker_Client_Notes[]                  @relation("Tracker_Client_Notes_DeletedbyUserIdToTracker_Users")
+  Tracker_Client_TestDetails                                                                       Tracker_Client_TestDetails[]
+  Tracker_Client_TestDetails_Audit_Tracker_Client_TestDetails_Audit_ChangedByUserIdToTracker_Users Tracker_Client_TestDetails_Audit[]      @relation("Tracker_Client_TestDetails_Audit_ChangedByUserIdToTracker_Users")
+  Tracker_Client_TestDetails_Audit_Tracker_Client_TestDetails_Audit_OwnerIdToTracker_Users         Tracker_Client_TestDetails_Audit[]      @relation("Tracker_Client_TestDetails_Audit_OwnerIdToTracker_Users")
+  Tracker_Invoice_Lines                                                                            Tracker_Invoice_Lines[]
+  Tracker_Invoices                                                                                 Tracker_Invoices[]
+  Tracker_Notifications_Tracker_Notifications_AllocatedToUserIdToTracker_Users                     Tracker_Notifications[]                 @relation("Tracker_Notifications_AllocatedToUserIdToTracker_Users")
+  Tracker_Notifications_Tracker_Notifications_LoggedByUserIdToTracker_Users                        Tracker_Notifications[]                 @relation("Tracker_Notifications_LoggedByUserIdToTracker_Users")
+  Tracker_Tags                                                                                     Tracker_Tags[]
+  Tracker_Task_Audit                                                                               Tracker_Task_Audit[]
+  Tracker_Task_EmailSent                                                                           Tracker_Task_EmailSent[]
+  Tracker_Task_IntercomLinks_Tracker_Task_IntercomLinks_AuthorUserIdToTracker_Users                Tracker_Task_IntercomLinks[]            @relation("Tracker_Task_IntercomLinks_AuthorUserIdToTracker_Users")
+  Tracker_Task_IntercomLinks_Tracker_Task_IntercomLinks_DeletedbyUserIdToTracker_Users             Tracker_Task_IntercomLinks[]            @relation("Tracker_Task_IntercomLinks_DeletedbyUserIdToTracker_Users")
+  Tracker_Task_JiraLinks_Tracker_Task_JiraLinks_AuthorUserIdToTracker_Users                        Tracker_Task_JiraLinks[]                @relation("Tracker_Task_JiraLinks_AuthorUserIdToTracker_Users")
+  Tracker_Task_JiraLinks_Tracker_Task_JiraLinks_DeletedbyUserIdToTracker_Users                     Tracker_Task_JiraLinks[]                @relation("Tracker_Task_JiraLinks_DeletedbyUserIdToTracker_Users")
+  Tracker_Task_Notes_Tracker_Task_Notes_AuthorUserIdToTracker_Users                                Tracker_Task_Notes[]                    @relation("Tracker_Task_Notes_AuthorUserIdToTracker_Users")
+  Tracker_Task_Notes_Tracker_Task_Notes_DeletedbyUserIdToTracker_Users                             Tracker_Task_Notes[]                    @relation("Tracker_Task_Notes_DeletedbyUserIdToTracker_Users")
+  Tracker_Task_Owner_Change_Audit_Tracker_Task_Owner_Change_Audit_ChangedByUserIdToTracker_Users   Tracker_Task_Owner_Change_Audit[]       @relation("Tracker_Task_Owner_Change_Audit_ChangedByUserIdToTracker_Users")
+  Tracker_Task_Owner_Change_Audit_Tracker_Task_Owner_Change_Audit_ChangedFromUserIdToTracker_Users Tracker_Task_Owner_Change_Audit[]       @relation("Tracker_Task_Owner_Change_Audit_ChangedFromUserIdToTracker_Users")
+  Tracker_Task_Owner_Change_Audit_Tracker_Task_Owner_Change_Audit_ChangedToUserIdToTracker_Users   Tracker_Task_Owner_Change_Audit[]       @relation("Tracker_Task_Owner_Change_Audit_ChangedToUserIdToTracker_Users")
+  Tracker_Task_Source_Change_Audit                                                                 Tracker_Task_Source_Change_Audit[]
+  Tracker_Task_Tags_Tracker_Task_Tags_AddedByUserIdToTracker_Users                                 Tracker_Task_Tags[]                     @relation("Tracker_Task_Tags_AddedByUserIdToTracker_Users")
+  Tracker_Task_Tags_Tracker_Task_Tags_DeletedbyUserIdToTracker_Users                               Tracker_Task_Tags[]                     @relation("Tracker_Task_Tags_DeletedbyUserIdToTracker_Users")
+  Tracker_Tasks_Tracker_Tasks_AllocatedToUserIdToTracker_Users                                     Tracker_Tasks[]                         @relation("Tracker_Tasks_AllocatedToUserIdToTracker_Users")
+  Tracker_Tasks_Tracker_Tasks_LoggedByUserIdToTracker_Users                                        Tracker_Tasks[]                         @relation("Tracker_Tasks_LoggedByUserIdToTracker_Users")
+  Tracker_Tasks_Watchlist                                                                          Tracker_Tasks_Watchlist[]
+  Tracker_TimeTracking                                                                             Tracker_TimeTracking[]
+  Tracker_User_Annual_Leave_Tracker_User_Annual_Leave_AmendedByUserIdToTracker_Users               Tracker_User_Annual_Leave[]             @relation("Tracker_User_Annual_Leave_AmendedByUserIdToTracker_Users")
+  Tracker_User_Annual_Leave_Tracker_User_Annual_Leave_UserIdToTracker_Users                        Tracker_User_Annual_Leave[]             @relation("Tracker_User_Annual_Leave_UserIdToTracker_Users")
+  Tracker_User_Details_Audit_Tracker_User_Details_Audit_AmendedByUserIdToTracker_Users             Tracker_User_Details_Audit[]            @relation("Tracker_User_Details_Audit_AmendedByUserIdToTracker_Users")
+  Tracker_User_Details_Audit_Tracker_User_Details_Audit_AmendedUserIdToTracker_Users               Tracker_User_Details_Audit[]            @relation("Tracker_User_Details_Audit_AmendedUserIdToTracker_Users")
+  Tracker_User_Permission_Audit_Tracker_User_Permission_Audit_AmendedByUserIdToTracker_Users       Tracker_User_Permission_Audit[]         @relation("Tracker_User_Permission_Audit_AmendedByUserIdToTracker_Users")
+  Tracker_User_Permission_Audit_Tracker_User_Permission_Audit_AmendedUserIdToTracker_Users         Tracker_User_Permission_Audit[]         @relation("Tracker_User_Permission_Audit_AmendedUserIdToTracker_Users")
+  Tracker_User_Permissions                                                                         Tracker_User_Permissions[]
+  Tracker_User_Preference_Audit_Tracker_User_Preference_Audit_AmendedUserIdToTracker_Users         Tracker_User_Preference_Audit[]         @relation("Tracker_User_Preference_Audit_AmendedUserIdToTracker_Users")
+  Tracker_User_Preference_Audit_Tracker_User_Preference_Audit_AmendedByUserIdToTracker_Users       Tracker_User_Preference_Audit[]         @relation("Tracker_User_Preference_Audit_AmendedByUserIdToTracker_Users")
+  Tracker_User_Preferences                                                                         Tracker_User_Preferences[]
+  Tracker_User_Role_Permission_Audit                                                               Tracker_User_Role_Permission_Audit[]
+  Tracker_User_Role_Preference_Audit                                                               Tracker_User_Role_Preference_Audit[]
+  Tracker_User_Role_Settings_Audit                                                                 Tracker_User_Role_Settings_Audit[]
+  Tracker_User_Roles_Tracker_User_Roles_CreatedByUserIdToTracker_Users                             Tracker_User_Roles[]                    @relation("Tracker_User_Roles_CreatedByUserIdToTracker_Users")
+  Tracker_User_Setting_Audit_Tracker_User_Setting_Audit_AmendedByUserIdToTracker_Users             Tracker_User_Setting_Audit[]            @relation("Tracker_User_Setting_Audit_AmendedByUserIdToTracker_Users")
+  Tracker_User_Setting_Audit_Tracker_User_Setting_Audit_AmendedUserIdToTracker_Users               Tracker_User_Setting_Audit[]            @relation("Tracker_User_Setting_Audit_AmendedUserIdToTracker_Users")
+  Tracker_User_Settings                                                                            Tracker_User_Settings[]
+  Tracker_User_Team_Member_Audit_Tracker_User_Team_Member_Audit_AmendedByUserIdToTracker_Users     Tracker_User_Team_Member_Audit[]        @relation("Tracker_User_Team_Member_Audit_AmendedByUserIdToTracker_Users")
+  Tracker_User_Team_Member_Audit_Tracker_User_Team_Member_Audit_UserIdToTracker_Users              Tracker_User_Team_Member_Audit[]        @relation("Tracker_User_Team_Member_Audit_UserIdToTracker_Users")
+  Tracker_User_Team_Members                                                                        Tracker_User_Team_Members[]
+  Tracker_User_Team_Misc_Audit                                                                     Tracker_User_Team_Misc_Audit[]
+  Tracker_User_Teams                                                                               Tracker_User_Teams[]
+  Tracker_User_Time_Tracking                                                                       Tracker_User_Time_Tracking[]
+  Tracker_User_Departments                                                                         Tracker_User_Departments                @relation(fields: [DepartmentId], references: [Id], onUpdate: NoAction, map: "FK_Tracker_Users_Departments")
+  Tracker_User_Roles_Tracker_Users_RoleIdToTracker_User_Roles                                      Tracker_User_Roles?                     @relation("Tracker_Users_RoleIdToTracker_User_Roles", fields: [RoleId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Tracker_Users_Tracker_User_Roles")
+
+  @@schema("dbo")
+}
